@@ -10,6 +10,7 @@ passport.use(
       consumerKey: config.TWITTER_CONSUMER_KEY,
       consumerSecret: config.TWITTER_CONSUMER_SECRET,
       callbackURL: '/authenticate/callback',
+      proxy: true,
     },
     function(token, tokenSecret, profile, cb) {
       return cb(null, profile);
