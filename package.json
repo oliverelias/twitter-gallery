@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "concurrently -n server,react \"nodemon index.js\" \"npm run start --prefix client\"",
-    "start": "node index.js"
+    "start": "node index.js",
+    "postinstall": "cd client && npm run build"
   },
   "author": "",
   "license": "ISC",
