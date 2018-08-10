@@ -43,10 +43,10 @@ app.get('/authenticate/callback', passport.authenticate('twitter'), (req, res) =
   res.redirect('/');
 });
 
-// homepage route
-// app.get('/', (req, res) => {
-//   res.send(req.body);
-// });
+app.get('/getAuth/', (req, res) => {
+  console.log(req.user);
+  res.send(req.user);
+});
 
 app.use(express.static('./client/build'));
 const path = require('path');
