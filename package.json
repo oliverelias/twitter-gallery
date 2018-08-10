@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently \"nodemon index.js\" \"npm run start --prefix client\""
+    "dev": "concurrently -n server,react \"nodemon index.js\" \"npm run start --prefix client\""
   },
   "author": "",
   "license": "ISC",
