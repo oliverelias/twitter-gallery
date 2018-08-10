@@ -12,14 +12,15 @@ passport.use(
       callbackURL: '/authenticate/callback',
     },
     function(token, tokenSecret, profile, cb) {
-      console.log(profile);
       return cb(null, profile);
     }
   )
 );
 
+// Only store the twitter profile id, we can lookup
+// profile info using it later
 passport.serializeUser((user, cb) => {
-  cb(null, user);
+  cb(null, user.id);
 });
 passport.deserializeUser((obj, cb) => {
   cb(null, obj);
@@ -36,17 +37,21 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// authenticate with twitter using passport middleware
 app.get('/authenticate', passport.authenticate('twitter'));
 
-// where to return to after authentication
 app.get('/authenticate/callback', passport.authenticate('twitter'), (req, res) => {
   res.redirect('/');
 });
 
 // homepage route
-app.get('/', (req, res) => {
-  res.send(req.body);
+// app.get('/', (req, res) => {
+//   res.send(req.body);
+// });
+
+app.use(express.static('./client/build'));
+const path = require('path');
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '.', 'client', 'build', 'index.html'));
 });
 
 app.listen(5000);
