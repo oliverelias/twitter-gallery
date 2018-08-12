@@ -5,6 +5,9 @@
   "proxy": {
     "/getAuth": {
       "target": "http://localhost:5000/"
+    },
+    "/authenticate": {
+      "target": "http://localhost:5000/"
     }
   },
   "dependencies": {

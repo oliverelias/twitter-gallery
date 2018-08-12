@@ -3,4 +3,3 @@ module.exports = {
   TWITTER_CONSUMER_SECRET: process.env.TWITTER_CONSUMER_SECRET,
   COOKIE_KEY: process.env.COOKIE_KEY,
 };
-``;
