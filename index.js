@@ -2,6 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const TwitterStrategy = require('passport-twitter').Strategy;
 const cookieSession = require('cookie-session');
+
 const config = require('./config/config.js');
 
 const mongoose = require('mongoose');
@@ -15,7 +16,7 @@ const userSchema = new mongoose.Schema({
 });
 
 const User = mongoose.model('users', userSchema);
-mongoose.connect(config.MONGO_URI, { useNewUrlParser: true });
+mongoose.connect(config.MONGO_URI, { useNewUrlParser: true }); // suppress deprecation warning
 
 passport.use(
   new TwitterStrategy(
@@ -43,8 +44,7 @@ passport.use(
   )
 );
 
-// Only store the twitter profile id, we can lookup
-// profile info using it later
+// user.id here is the unique id of database entry
 passport.serializeUser((user, cb) => {
   cb(null, user.id);
 });
@@ -65,21 +65,8 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/authenticate', passport.authenticate('twitter'));
-
-app.get('/authenticate/callback', passport.authenticate('twitter'), (req, res) => {
-  res.redirect('/');
-});
-
-app.get('/logout', (req, res) => {
-  req.logout();
-  res.redirect('/');
-});
-
-app.get('/getAuth/', (req, res) => {
-  console.log(req.user);
-  res.send(req.user);
-});
+require('./routes/authRoutes')(app);
+require('./routes/apiRoutes')(app);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('./client/build'));
