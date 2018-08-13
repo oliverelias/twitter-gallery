@@ -1,27 +1,18 @@
 import React, { Component } from 'react';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Typography from '@material-ui/core/Typography';
+
+import AppHeader from './components/AppHeader';
+
 import axios from 'axios';
 
 class App extends Component {
-  state = {
-    authenticated: false,
-  };
-
-  getAuthentication = () => {
-    let status = axios.get('/auth/status').then(user => user.data !== undefined);
-    console.log(status);
-    return status;
-  };
-
-  componentDidMount() {
-    this.getAuthentication().then(authenticated => this.setState({ authenticated }));
-  }
-
   render() {
-    const auth = this.state.authenticated;
     return (
-      <div className="App">
-        <p>Authenticated?: {auth ? 'Yep!' : 'Nope!'}</p>
-      </div>
+      <React.Fragment>
+        <CssBaseline />
+        <AppHeader />
+      </React.Fragment>
     );
   }
 }

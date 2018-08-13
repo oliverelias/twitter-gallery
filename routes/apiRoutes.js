@@ -13,6 +13,20 @@ const createTwit = (accessToken, accessSecret) => {
 };
 
 module.exports = app => {
+  app.get('/api/current_user', (req, res) => {
+    if (req.user) {
+      userObj = {
+        username: req.user.username,
+        displayName: req.user.displayName,
+        profileImageUrl: req.user.profileImageUrl,
+      };
+      console.log(userObj);
+      res.send(JSON.stringify(userObj));
+    } else {
+      res.send(null);
+    }
+  });
+
   app.get('/api/home', async (req, res) => {
     const t = createTwit(req.user.token, req.user.tokenSecret);
     const tweets = await t.get('statuses/home_timeline');
