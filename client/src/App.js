@@ -7,7 +7,7 @@ class App extends Component {
   };
 
   getUserId = () => {
-    let id = axios.get('/getAuth').then(user => user.data);
+    let id = axios.get('/getAuth').then(user => user.data.twitterId);
     return id;
   };
 

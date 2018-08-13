@@ -4,6 +4,19 @@ const TwitterStrategy = require('passport-twitter').Strategy;
 const cookieSession = require('cookie-session');
 const config = require('./config/config.js');
 
+const mongoose = require('mongoose');
+const userSchema = new mongoose.Schema({
+  token: String,
+  tokenSecret: String,
+  twitterId: String,
+  username: String,
+  displayName: String,
+  profileImageUrl: String,
+});
+
+const User = mongoose.model('users', userSchema);
+mongoose.connect(config.MONGO_URI, { useNewUrlParser: true });
+
 passport.use(
   new TwitterStrategy(
     {
@@ -12,8 +25,20 @@ passport.use(
       callbackURL: '/authenticate/callback',
       proxy: true,
     },
-    function(token, tokenSecret, profile, cb) {
-      return cb(null, profile);
+    async function(token, tokenSecret, profile, cb) {
+      const existingUser = await User.findOne({ twitterId: profile.id });
+      if (existingUser) {
+        return cb(null, existingUser);
+      }
+      const newUser = await new User({
+        token: token,
+        tokenSecret: tokenSecret,
+        twitterId: profile.id,
+        username: profile.username,
+        displayName: profile.displayName,
+        profileImageUrl: profile._json.profile_image_url,
+      }).save();
+      return cb(null, newUser);
     }
   )
 );
@@ -24,7 +49,9 @@ passport.serializeUser((user, cb) => {
   cb(null, user.id);
 });
 passport.deserializeUser((obj, cb) => {
-  cb(null, obj);
+  User.findById(obj).then(user => {
+    cb(null, user);
+  });
 });
 
 const app = express();
