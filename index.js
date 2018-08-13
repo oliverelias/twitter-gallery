@@ -23,7 +23,7 @@ passport.use(
     {
       consumerKey: config.TWITTER_CONSUMER_KEY,
       consumerSecret: config.TWITTER_CONSUMER_SECRET,
-      callbackURL: '/authenticate/callback',
+      callbackURL: '/auth/callback',
       proxy: true,
     },
     async function(token, tokenSecret, profile, cb) {

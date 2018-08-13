@@ -3,22 +3,24 @@ import axios from 'axios';
 
 class App extends Component {
   state = {
-    userId: '',
+    authenticated: false,
   };
 
-  getUserId = () => {
-    let id = axios.get('/getAuth').then(user => user.data.twitterId);
-    return id;
+  getAuthentication = () => {
+    let status = axios.get('/auth/status').then(user => user.data !== undefined);
+    console.log(status);
+    return status;
   };
 
   componentDidMount() {
-    this.getUserId().then(userId => this.setState({ userId }));
+    this.getAuthentication().then(authenticated => this.setState({ authenticated }));
   }
 
   render() {
+    const auth = this.state.authenticated;
     return (
       <div className="App">
-        <p>User ID: {this.state.userId}</p>
+        <p>Authenticated?: {auth ? 'Yep!' : 'Nope!'}</p>
       </div>
     );
   }
