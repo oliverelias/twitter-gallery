@@ -18,7 +18,7 @@ const styles = {
     marginRight: 20,
   },
   profileImage: {
-    marginLeft: '12px',
+    marginLeft: '6px',
     height: '32px',
     width: '32px',
   },
