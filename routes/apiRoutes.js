@@ -29,7 +29,7 @@ module.exports = app => {
 
   app.get('/api/home', async (req, res) => {
     const t = createTwit(req.user.token, req.user.tokenSecret);
-    const tweets = await t.get('statuses/home_timeline');
+    const tweets = await t.get('statuses/home_timeline', { count: 100 });
     res.send(tweets.data);
   });
 

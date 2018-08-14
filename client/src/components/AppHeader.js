@@ -51,6 +51,7 @@ class AppHeader extends Component {
   };
 
   componentDidMount() {
+    console.log('Inside componentDidMount() of AppHeader.js');
     this.getAuthentication();
   }
 

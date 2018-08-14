@@ -3,6 +3,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 
 import AppHeader from './components/AppHeader';
+import Gallery from './components/Gallery';
 
 import axios from 'axios';
 
@@ -12,6 +13,7 @@ class App extends Component {
       <React.Fragment>
         <CssBaseline />
         <AppHeader />
+        <Gallery />
       </React.Fragment>
     );
   }
