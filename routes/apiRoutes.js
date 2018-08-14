@@ -1,5 +1,6 @@
 const passport = require('passport');
 const twit = require('twit');
+const fs = require('fs');
 const config = require('../config/config.js');
 
 const createTwit = (accessToken, accessSecret) => {
@@ -55,5 +56,10 @@ module.exports = app => {
       q: req.params.query,
     });
     res.send(tweets.data);
+  });
+
+  app.get('/api/dummy_images', (req, res) => {
+    fileList = fs.readdirSync('./client/public/dummy_images');
+    res.send(fileList);
   });
 };

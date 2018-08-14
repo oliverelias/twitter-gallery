@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
+import fs from 'fs';
 
 const getImageUrl = tweet => {
   if (!tweet.extended_entities) return null;
@@ -31,17 +32,22 @@ class Gallery extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      images: [],
+      images: [1, 2],
     };
   }
 
   componentDidMount() {
-    this.setState({ images: ['1'] });
-    console.log('Inside componentDidMount() of Gallery.js');
-    axios.get('/api/home').then(res => {
-      console.log('HEWWO?!');
-      return this.setState({
-        images: tweetsToImages(res.data),
+    // axios.get('/api/user_favorites/crabennui').then(res => {
+    //   console.log('HEWWO?!');
+    //   return this.setState({
+    //     images: tweetsToImages(res.data),
+    //   });
+    // });
+
+    // Dummy images
+    axios.get('/api/dummy_images').then(res => {
+      this.setState({
+        images: res.data,
       });
     });
   }
@@ -54,8 +60,8 @@ class Gallery extends Component {
         <ul className={classes.galleryContainer}>
           {images.map(url => (
             <li>
-              <a href={url}>
-                <img className={classes.galleryImage} src={url + ':small'} alt="" />
+              <a href={'/dummy_images/' + url}>
+                <img className={classes.galleryImage} src={'/dummy_images/' + url} alt="" />
               </a>
             </li>
           ))}
