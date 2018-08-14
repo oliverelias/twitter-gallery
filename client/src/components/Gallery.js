@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import fs from 'fs';
 
@@ -26,13 +30,20 @@ const styles = {
   galleryImage: {
     maxHeight: '300px',
   },
+  card: {
+    marginBottom: 16,
+  },
+  cardImage: {
+    padding: 8,
+    height: '300px',
+  },
 };
 
 class Gallery extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      images: [1, 2],
+      images: [],
     };
   }
 
@@ -60,9 +71,9 @@ class Gallery extends Component {
         <ul className={classes.galleryContainer}>
           {images.map(url => (
             <li>
-              <a href={'/dummy_images/' + url}>
-                <img className={classes.galleryImage} src={'/dummy_images/' + url} alt="" />
-              </a>
+              <Card className={classes.card}>
+                <img src={'/dummy_images/' + url} className={classes.cardImage} alt="" />
+              </Card>
             </li>
           ))}
         </ul>
