@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import blue from '@material-ui/core/colors/blue';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
@@ -16,8 +17,10 @@ const getImageUrl = tweet => {
 };
 
 const tweetsToImages = tweets => {
-  console.log(tweets);
-  return tweets.map(tweet => getImageUrl(tweet)).filter(tweet => tweet);
+  return tweets
+    .map(tweet => getImageUrl(tweet))
+    .filter(tweet => tweet)
+    .reduce((acc, cur) => acc.concat(cur));
 };
 
 const styles = {
@@ -26,12 +29,18 @@ const styles = {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+    marginTop: '86px',
   },
   galleryImage: {
     maxHeight: '300px',
   },
   card: {
     marginBottom: 16,
+    transition: 'background-color 50ms linear',
+    '&:hover': {
+      backgroundColor: blue[50],
+      cursor: 'pointer',
+    },
   },
   cardImage: {
     padding: 8,
@@ -48,19 +57,20 @@ class Gallery extends Component {
   }
 
   componentDidMount() {
-    // axios.get('/api/user_favorites/crabennui').then(res => {
-    //   console.log('HEWWO?!');
-    //   return this.setState({
-    //     images: tweetsToImages(res.data),
-    //   });
-    // });
-
-    // Dummy images
-    axios.get('/api/dummy_images').then(res => {
-      this.setState({
-        images: res.data,
+    axios.get('/api/home').then(res => {
+      return this.setState({
+        images: tweetsToImages(res.data),
       });
     });
+
+    // Dummy images
+    // const start = performance.now();
+    // axios.get('/api/dummy_images').then(res => {
+    //   this.setState({
+    //     images: res.data,
+    //   });
+    // });
+    // const end = performance.now() - start;
   }
 
   render() {
@@ -72,7 +82,7 @@ class Gallery extends Component {
           {images.map(url => (
             <li>
               <Card className={classes.card}>
-                <img src={'/dummy_images/' + url} className={classes.cardImage} alt="" />
+                <img src={url} className={classes.cardImage} alt="" />
               </Card>
             </li>
           ))}

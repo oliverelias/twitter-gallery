@@ -9,20 +9,30 @@ import Avatar from '@material-ui/core/Avatar';
 import MenuIcon from '@material-ui/icons/Menu';
 import axios from 'axios';
 
-const styles = {
+const styles = theme => ({
+  appHeaderRoot: {
+    position: 'absolute',
+    marginLeft: '240px',
+    [theme.breakpoints.up('md')]: {
+      width: `calc(100% - 240px)`,
+    },
+  },
   flex: {
     flexGrow: 1,
   },
   menuButton: {
     marginLeft: -12,
     marginRight: 20,
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+    },
   },
   profileImage: {
     marginLeft: '6px',
     height: '32px',
     width: '32px',
   },
-};
+});
 
 class AppHeader extends Component {
   constructor(props) {
@@ -51,7 +61,6 @@ class AppHeader extends Component {
   };
 
   componentDidMount() {
-    console.log('Inside componentDidMount() of AppHeader.js');
     this.getAuthentication();
   }
 
@@ -63,24 +72,27 @@ class AppHeader extends Component {
     const { classes } = this.props;
     const { authenticated, username, displayName, profileImageUrl } = this.state;
     return (
-      <div>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="title" color="inherit" className={classes.flex}>
-              Twitter Gallery
-            </Typography>
-            <Button href={authenticated ? '/auth/logout' : '/auth/authenticate'} color="inherit">
-              {authenticated ? displayName : 'Login with Twitter'}
-            </Button>
-            {authenticated ? (
-              <Avatar alt={displayName} src={profileImageUrl} className={classes.profileImage} />
-            ) : null}
-          </Toolbar>
-        </AppBar>
-      </div>
+      <AppBar className={classes.appHeaderRoot}>
+        <Toolbar>
+          <IconButton
+            onClick={this.props.handleDrawerToggle}
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="Menu"
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="title" color="inherit" className={classes.flex}>
+            Twitter Gallery
+          </Typography>
+          <Button href={authenticated ? '/auth/logout' : '/auth/authenticate'} color="inherit">
+            {authenticated ? displayName : 'Login with Twitter'}
+          </Button>
+          {authenticated ? (
+            <Avatar alt={displayName} src={profileImageUrl} className={classes.profileImage} />
+          ) : null}
+        </Toolbar>
+      </AppBar>
     );
   }
 }

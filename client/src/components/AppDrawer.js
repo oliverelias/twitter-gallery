@@ -1,0 +1,54 @@
+import React, { Component } from 'react';
+import Drawer from '@material-ui/core/Drawer';
+import { withStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import Hidden from '@material-ui/core/Hidden';
+import Divider from '@material-ui/core/Divider';
+import MenuIcon from '@material-ui/icons/Menu';
+
+const styles = theme => ({
+  drawerPaper: {
+    width: '240px',
+    [theme.breakpoints.up('md')]: {
+      position: 'relative',
+    },
+  },
+});
+
+const AppDrawer = props => {
+  const { classes } = props;
+  console.log(classes);
+  return (
+    <div>
+      <Hidden mdUp>
+        <Drawer
+          variant="temporary"
+          open={props.mobileOpen}
+          onClose={props.handleDrawerToggle}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+        >
+          Test temporary
+        </Drawer>
+      </Hidden>
+      <Hidden smDown>
+        <Drawer
+          variant="permanent"
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          <p>Test permanent</p>
+        </Drawer>
+      </Hidden>
+    </div>
+  );
+};
+
+export default withStyles(styles)(AppDrawer);
