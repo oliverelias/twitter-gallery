@@ -7,8 +7,12 @@ import IconButton from '@material-ui/core/IconButton';
 import Hidden from '@material-ui/core/Hidden';
 import Divider from '@material-ui/core/Divider';
 import MenuIcon from '@material-ui/icons/Menu';
+import { mailFolderListItems, otherMailFolderListItems } from './AppDrawerContents';
 
 const styles = theme => ({
+  drawerItems: {
+    marginTop: '64px'
+  },
   drawerPaper: {
     width: '240px',
     [theme.breakpoints.up('md')]: {
@@ -19,7 +23,17 @@ const styles = theme => ({
 
 const AppDrawer = props => {
   const { classes } = props;
-  console.log(classes);
+  
+  const drawer = (
+      <div className={classes.drawerItems}>
+        <div className={classes.toolbar} />
+        <Divider />
+        <List>{mailFolderListItems}</List>
+        <Divider />
+        <List>{otherMailFolderListItems}</List>
+      </div>
+    );
+
   return (
     <div>
       <Hidden mdUp>
@@ -34,7 +48,7 @@ const AppDrawer = props => {
             keepMounted: true, // Better open performance on mobile.
           }}
         >
-          Test temporary
+          {drawer}
         </Drawer>
       </Hidden>
       <Hidden smDown>
@@ -44,7 +58,7 @@ const AppDrawer = props => {
             paper: classes.drawerPaper,
           }}
         >
-          <p>Test permanent</p>
+          {drawer}
         </Drawer>
       </Hidden>
     </div>

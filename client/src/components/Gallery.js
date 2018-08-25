@@ -5,46 +5,62 @@ import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import ButtonBase from '@material-ui/core/ButtonBase';
+import Grow from '@material-ui/core/Grow';
 import axios from 'axios';
-import fs from 'fs';
 
 const getImageUrl = tweet => {
   if (!tweet.extended_entities) return null;
   if (!tweet.extended_entities.media) return null;
   return tweet.extended_entities.media.map(obj => {
-    return obj.media_url;
+    let w = obj.sizes.large.w;
+    let h = obj.sizes.large.h;
+    let aspect = w > h ? 'wide' : 'tall';
+    console.log(aspect);
+    return {
+      url: obj.media_url + ':small',
+      aspect: aspect,
+    };
   });
 };
 
 const tweetsToImages = tweets => {
   return tweets
-    .map(tweet => getImageUrl(tweet))
-    .filter(tweet => tweet)
-    .reduce((acc, cur) => acc.concat(cur));
+    .map(tweet => getImageUrl(tweet))       // extract media urls
+    .filter(tweet => tweet !== null)        // remove any tweets with null media
+    .reduce((acc, cur) => acc.concat(cur)); // reduce to flat list (multi-image tweets)
 };
 
 const styles = {
   galleryContainer: {
+    padding: '0 40px',
     listStyle: 'none',
     display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
     marginTop: '86px',
   },
-  galleryImage: {
-    maxHeight: '300px',
+  cardContainer: {
+    marginBottom: 16,
+
   },
   card: {
-    marginBottom: 16,
-    transition: 'background-color 50ms linear',
+    height: '300px',
+    width: '200px',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
     '&:hover': {
-      backgroundColor: blue[50],
-      cursor: 'pointer',
-    },
+      opacity: 0.85,
+    }
+    // transition: 'background-color 50ms linear',
+    // '&:hover': {
+    //   backgroundColor: blue[50],
+    //   cursor: 'pointer',
+    // },
   },
   cardImage: {
-    padding: 8,
-    height: '300px',
+
   },
 };
 
@@ -57,14 +73,15 @@ class Gallery extends Component {
   }
 
   componentDidMount() {
-    axios.get('/api/home').then(res => {
+    axios.get('/api/user_timeline/nbsparth').then(res => {
+      console.log('axios get: ' + res);
       return this.setState({
         images: tweetsToImages(res.data),
       });
     });
 
     // Dummy images
-    // const start = performance.now();
+    const start = performance.now();
     // axios.get('/api/dummy_images').then(res => {
     //   this.setState({
     //     images: res.data,
@@ -80,11 +97,17 @@ class Gallery extends Component {
       <div>
         <ul className={classes.galleryContainer}>
           {images.map(url => (
-            <li>
-              <Card className={classes.card}>
-                <img src={url} className={classes.cardImage} alt="" />
-              </Card>
-            </li>
+            <Grow key={url.url} in={true}>
+              <li className={classes.cardContainer}>
+                <ButtonBase focusRipple>
+                  <Card className={classes.card} style={{
+                    backgroundImage: 'url(' + url.url + ')',
+                    width: url.aspect === 'wide' ? '400px' : '200px',
+                  }}>
+                  </Card>
+                </ButtonBase>
+              </li>
+            </Grow>
           ))}
         </ul>
       </div>
