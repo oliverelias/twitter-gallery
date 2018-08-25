@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Hidden from '@material-ui/core/Hidden';
 import Divider from '@material-ui/core/Divider';
 import MenuIcon from '@material-ui/icons/Menu';
-import { mailFolderListItems, otherMailFolderListItems } from './AppDrawerContents';
+import { mainItems, subItems } from './AppDrawerContents';
 
 const styles = theme => ({
   drawerItems: {
@@ -25,9 +25,9 @@ const AppDrawer = props => {
     <div className={classes.drawerItems}>
       <div className={classes.toolbar} />
       <Divider />
-      <List>{mailFolderListItems}</List>
+      <List>{mainItems}</List>
       <Divider />
-      <List>{otherMailFolderListItems}</List>
+      <List>{subItems}</List>
     </div>
   );
 

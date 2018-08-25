@@ -9,55 +9,46 @@ import SendIcon from '@material-ui/icons/Send';
 import MailIcon from '@material-ui/icons/Mail';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ReportIcon from '@material-ui/icons/Report';
+import HomeIcon from '@material-ui/icons/Home';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import { GithubCircle, AccountMultiple, AccountMultipleOutline } from 'mdi-material-ui';
 
-export const mailFolderListItems = (
+export const mainItems = (
   <div>
     <ListItem button>
       <ListItemIcon>
-        <InboxIcon />
+        <HomeIcon />
       </ListItemIcon>
-      <ListItemText primary="Inbox" />
+      <ListItemText primary="Home" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
         <StarIcon />
       </ListItemIcon>
-      <ListItemText primary="Starred" />
+      <ListItemText primary="Likes" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
-        <SendIcon />
+        <AccountMultiple />
       </ListItemIcon>
-      <ListItemText primary="Send mail" />
+      <ListItemText primary="Following" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
-        <DraftsIcon />
+        <AccountMultipleOutline />
       </ListItemIcon>
-      <ListItemText primary="Drafts" />
+      <ListItemText primary="Followers" />
     </ListItem>
   </div>
 );
 
-export const otherMailFolderListItems = (
+export const subItems = (
   <div>
     <ListItem button>
       <ListItemIcon>
-        <MailIcon />
+        <GithubCircle />
       </ListItemIcon>
-      <ListItemText primary="All mail" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <DeleteIcon />
-      </ListItemIcon>
-      <ListItemText primary="Trash" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <ReportIcon />
-      </ListItemIcon>
-      <ListItemText primary="Spam" />
+      <ListItemText primary="Github" />
     </ListItem>
   </div>
 );
