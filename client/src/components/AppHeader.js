@@ -11,11 +11,7 @@ import axios from 'axios';
 
 const styles = theme => ({
   appHeaderRoot: {
-    position: 'absolute',
-    marginLeft: '240px',
-    [theme.breakpoints.up('md')]: {
-      width: `calc(100% - 240px)`,
-    },
+    zIndex: theme.zIndex.drawer + 1,
   },
   flex: {
     flexGrow: 1,

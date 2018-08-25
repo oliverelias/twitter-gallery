@@ -16,7 +16,6 @@ const getImageUrl = tweet => {
     let w = obj.sizes.large.w;
     let h = obj.sizes.large.h;
     let aspect = w > h ? 'wide' : 'tall';
-    console.log(aspect);
     return {
       url: obj.media_url + ':small',
       aspect: aspect,
@@ -26,12 +25,12 @@ const getImageUrl = tweet => {
 
 const tweetsToImages = tweets => {
   return tweets
-    .map(tweet => getImageUrl(tweet))       // extract media urls
-    .filter(tweet => tweet !== null)        // remove any tweets with null media
+    .map(tweet => getImageUrl(tweet)) // extract media urls
+    .filter(tweet => tweet !== null) // remove any tweets with null media
     .reduce((acc, cur) => acc.concat(cur)); // reduce to flat list (multi-image tweets)
 };
 
-const styles = {
+const styles = theme => ({
   galleryContainer: {
     padding: '0 40px',
     listStyle: 'none',
@@ -39,10 +38,12 @@ const styles = {
     flexWrap: 'wrap',
     justifyContent: 'space-evenly',
     marginTop: '86px',
+    [theme.breakpoints.up('md')]: {
+      marginLeft: '240px',
+    },
   },
   cardContainer: {
     marginBottom: 16,
-
   },
   card: {
     height: '300px',
@@ -52,17 +53,15 @@ const styles = {
     backgroundPosition: 'center',
     '&:hover': {
       opacity: 0.85,
-    }
+    },
     // transition: 'background-color 50ms linear',
     // '&:hover': {
     //   backgroundColor: blue[50],
     //   cursor: 'pointer',
     // },
   },
-  cardImage: {
-
-  },
-};
+  cardImage: {},
+});
 
 class Gallery extends Component {
   constructor(props) {
@@ -73,7 +72,7 @@ class Gallery extends Component {
   }
 
   componentDidMount() {
-    axios.get('/api/user_timeline/nbsparth').then(res => {
+    axios.get('/api/home').then(res => {
       console.log('axios get: ' + res);
       return this.setState({
         images: tweetsToImages(res.data),
@@ -90,26 +89,33 @@ class Gallery extends Component {
     // const end = performance.now() - start;
   }
 
+  renderImages = () => {
+    const { classes } = this.props;
+    const { images } = this.state;
+
+    return images.map(url => {
+      return (
+        <li key={url.url} className={classes.cardContainer}>
+          <ButtonBase focusRipple>
+            <Card
+              className={classes.card}
+              style={{
+                backgroundImage: 'url(' + url.url + ')',
+                width: url.aspect === 'wide' ? '400px' : '200px',
+              }}
+            />
+          </ButtonBase>
+        </li>
+      );
+    });
+  };
+
   render() {
     const { classes } = this.props;
     const { images } = this.state;
     return (
       <div>
-        <ul className={classes.galleryContainer}>
-          {images.map(url => (
-            <Grow key={url.url} in={true}>
-              <li className={classes.cardContainer}>
-                <ButtonBase focusRipple>
-                  <Card className={classes.card} style={{
-                    backgroundImage: 'url(' + url.url + ')',
-                    width: url.aspect === 'wide' ? '400px' : '200px',
-                  }}>
-                  </Card>
-                </ButtonBase>
-              </li>
-            </Grow>
-          ))}
-        </ul>
+        <ul className={classes.galleryContainer}>{this.renderImages()}</ul>
       </div>
     );
   }

@@ -11,28 +11,25 @@ import { mailFolderListItems, otherMailFolderListItems } from './AppDrawerConten
 
 const styles = theme => ({
   drawerItems: {
-    marginTop: '64px'
+    marginTop: '64px',
   },
   drawerPaper: {
     width: '240px',
-    [theme.breakpoints.up('md')]: {
-      position: 'relative',
-    },
   },
 });
 
 const AppDrawer = props => {
   const { classes } = props;
-  
+
   const drawer = (
-      <div className={classes.drawerItems}>
-        <div className={classes.toolbar} />
-        <Divider />
-        <List>{mailFolderListItems}</List>
-        <Divider />
-        <List>{otherMailFolderListItems}</List>
-      </div>
-    );
+    <div className={classes.drawerItems}>
+      <div className={classes.toolbar} />
+      <Divider />
+      <List>{mailFolderListItems}</List>
+      <Divider />
+      <List>{otherMailFolderListItems}</List>
+    </div>
+  );
 
   return (
     <div>
