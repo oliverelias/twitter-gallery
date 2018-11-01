@@ -61,23 +61,25 @@ module.exports = app => {
   });
 
   app.get('/api/dummy_images', async (req, res) => {
-    const fileList = await fs.readdirSync('./client/public/dummy_images').map(file => {
-      let dimensions = sizeOf('./client/public/dummy_images/' + file);
+    const fileList = await fs.readdirSync('./client/public/dummy_images/small').map(file => {
+      let dimensions = sizeOf('./client/public/dummy_images/small/' + file);
+      let aspect = dimensions.width > dimensions.height ? 'wide' : 'tall';
       return {
         extended_entities: {
           media: [
             {
-              media_url: '/dummy_images/' + file,
+              media_url: '/dummy_images/small/' + file,
               sizes: {
                 large: {
                   w: dimensions.width,
                   h: dimensions.height,
-                }
-              }
-            }
-          ]
-        }
-      }
+                },
+              },
+            },
+          ],
+        },
+        aspect: aspect,
+      };
     });
     // fileList.map(file => {
     //   console.log(file);
@@ -94,8 +96,6 @@ module.exports = app => {
     //   //   }
     //   // }
     // })
-    console.log('filelist: ' + fileList);
     res.send(fileList);
-    
   });
 };

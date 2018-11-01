@@ -34,17 +34,15 @@ const styles = theme => ({
   galleryContainer: {
     padding: '0 40px',
     listStyle: 'none',
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-evenly',
+    display: 'grid',
+    gridTemplateColumns: '200px 200px 200px 200px 200px 200px 200px',
+    gap: '16px',
     marginTop: '86px',
     [theme.breakpoints.up('md')]: {
       marginLeft: '240px',
     },
   },
-  cardContainer: {
-    marginBottom: 16,
-  },
+  cardContainer: {},
   card: {
     height: '300px',
     width: '200px',
@@ -68,40 +66,50 @@ class Gallery extends Component {
     super(props);
     this.state = {
       images: [],
+      dummy: false,
     };
   }
 
   componentDidMount() {
-    axios.get('/api/home').then(res => {
-      console.log('axios get: ' + res);
+    const url = this.state.dummy ? 'api/dummy_images' : '/api/home';
+    axios.get(url).then(res => {
       return this.setState({
         images: tweetsToImages(res.data),
       });
     });
-
-    // Dummy images
-    const start = performance.now();
-    // axios.get('/api/dummy_images').then(res => {
-    //   this.setState({
-    //     images: res.data,
-    //   });
-    // });
-    // const end = performance.now() - start;
   }
 
   renderImages = () => {
     const { classes } = this.props;
     const { images } = this.state;
 
-    return images.map(url => {
+    console.log('inside renderImages');
+    console.log(images);
+
+    let col = 1;
+
+    return images.map(image => {
+      let aspect = image.aspect;
+      const url = image.url;
+
+      // if in last column, make aspect tall
+      if (col === 7) aspect = 'tall';
+      // set up next column position
+      aspect === 'wide' ? (col += 2) : (col += 1);
+      // if next column not in grid, reset to first
+      if (col > 7) col = 1;
+
       return (
-        <li key={url.url} className={classes.cardContainer}>
+        <li
+          key={url}
+          className={classes.cardContainer}
+          style={{ gridColumnEnd: aspect === 'wide' ? 'span 2' : 'span 1' }}>
           <ButtonBase focusRipple>
             <Card
               className={classes.card}
               style={{
-                backgroundImage: 'url(' + url.url + ')',
-                width: url.aspect === 'wide' ? '400px' : '200px',
+                backgroundImage: 'url(' + url + ')',
+                width: aspect === 'wide' ? '416px' : '200px',
               }}
             />
           </ButtonBase>
