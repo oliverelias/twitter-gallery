@@ -16,7 +16,10 @@ const userSchema = new mongoose.Schema({
 });
 
 const User = mongoose.model('users', userSchema);
-mongoose.connect(config.MONGO_URI, { useNewUrlParser: true }); // suppress deprecation warning
+mongoose.connect(
+  config.MONGO_URI,
+  { useNewUrlParser: true }
+); // suppress deprecation warning
 
 passport.use(
   new TwitterStrategy(
@@ -74,7 +77,7 @@ if (process.env.NODE_ENV === 'production') {
   // Express will serve index.html for any
   // unrecognized path
   const path = require('path');
-  app.get('/', (req, res) => {
+  app.get('/*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '.', 'client', 'build', 'index.html'));
   });
 }
