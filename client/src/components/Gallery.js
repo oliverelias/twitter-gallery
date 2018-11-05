@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import Loading from './Loading';
 import axios from 'axios';
 
 const getImageUrl = tweet => {
@@ -61,7 +62,7 @@ const styles = theme => ({
   cardImage: {},
   wide: {
     flexGrow: 2,
-    minWidth: '400px',
+    minWidth: '350px',
   },
 });
 
@@ -70,7 +71,8 @@ class Gallery extends Component {
     super(props);
     this.state = {
       images: [],
-      dummy: true,
+      loading: false,
+      dummy: false,
     };
   }
 
@@ -79,7 +81,6 @@ class Gallery extends Component {
     if (this.state.dummy) {
       url = 'api/dummy_images';
     } else {
-      console.log(this.props);
       const source = this.props.match.params.user;
       url = source === undefined ? 'api/home' : `api/user_timeline/${source}`;
     }
@@ -90,14 +91,26 @@ class Gallery extends Component {
     });
   }
 
+  componentWillReceiveProps() {
+    this.setState({
+      loading: true,
+    });
+    let url;
+    console.log('Inside will receive props');
+    const source = this.props.match.params.user;
+    url = source === undefined ? 'api/home' : `api/user_timeline/${source}`;
+
+    axios.get(url).then(res => {
+      return this.setState({
+        images: tweetsToImages(res.data),
+        loading: false,
+      });
+    });
+  }
+
   renderImages = () => {
     const { classes } = this.props;
     const { images } = this.state;
-
-    console.log('inside renderImages');
-    console.log(images);
-
-    let col = 1;
 
     return images.map(image => {
       let aspect = image.aspect;
@@ -117,9 +130,12 @@ class Gallery extends Component {
 
   render() {
     const { classes } = this.props;
+    const { loading } = this.state;
     return (
       <div>
-        <ul className={classes.galleryContainer}>{this.renderImages()}</ul>
+        <div className={classes.galleryContainer}>
+          {loading ? <Loading /> : this.renderImages()}
+        </div>
       </div>
     );
   }
