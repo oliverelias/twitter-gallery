@@ -1,12 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
 import Hidden from '@material-ui/core/Hidden';
 import Divider from '@material-ui/core/Divider';
-import MenuIcon from '@material-ui/icons/Menu';
 import { mainItems, subItems } from './AppDrawerContents';
 
 const styles = theme => ({
@@ -43,8 +40,7 @@ const AppDrawer = props => {
           }}
           ModalProps={{
             keepMounted: true, // Better open performance on mobile.
-          }}
-        >
+          }}>
           {drawer}
         </Drawer>
       </Hidden>
@@ -53,8 +49,7 @@ const AppDrawer = props => {
           variant="permanent"
           classes={{
             paper: classes.drawerPaper,
-          }}
-        >
+          }}>
           {drawer}
         </Drawer>
       </Hidden>

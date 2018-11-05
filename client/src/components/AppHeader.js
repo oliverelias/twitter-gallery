@@ -42,7 +42,7 @@ class AppHeader extends Component {
   }
 
   getAuthentication = () => {
-    let user = axios.get('/api/current_user').then(user => {
+    axios.get('/api/current_user').then(user => {
       if (user.data) {
         return this.setState({
           authenticated: true,
@@ -66,7 +66,7 @@ class AppHeader extends Component {
 
   render() {
     const { classes } = this.props;
-    const { authenticated, username, displayName, profileImageUrl } = this.state;
+    const { authenticated, displayName, profileImageUrl } = this.state;
     return (
       <AppBar className={classes.appHeaderRoot}>
         <Toolbar>
@@ -74,8 +74,7 @@ class AppHeader extends Component {
             onClick={this.props.handleDrawerToggle}
             className={classes.menuButton}
             color="inherit"
-            aria-label="Menu"
-          >
+            aria-label="Menu">
             <MenuIcon />
           </IconButton>
           <Typography variant="title" color="inherit" className={classes.flex}>

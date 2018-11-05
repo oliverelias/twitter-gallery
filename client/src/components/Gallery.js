@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import blue from '@material-ui/core/colors/blue';
 import Card from '@material-ui/core/Card';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import Grow from '@material-ui/core/Grow';
 import axios from 'axios';
 
 const getImageUrl = tweet => {
@@ -120,7 +115,6 @@ class Gallery extends Component {
 
   render() {
     const { classes } = this.props;
-    const { images } = this.state;
     return (
       <div>
         <ul className={classes.galleryContainer}>{this.renderImages()}</ul>
