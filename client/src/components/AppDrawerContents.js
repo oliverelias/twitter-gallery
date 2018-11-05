@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -8,25 +9,28 @@ import { GithubCircle, AccountMultiple, AccountMultipleOutline } from 'mdi-mater
 
 export const mainItems = (
   <div>
-    <ListItem button>
+    <ListItem button component={Link} to="/">
       <ListItemIcon>
         <HomeIcon />
       </ListItemIcon>
       <ListItemText primary="Home" />
     </ListItem>
-    <ListItem button>
+
+    <ListItem button component={Link} to="/i/likes">
       <ListItemIcon>
         <StarIcon />
       </ListItemIcon>
       <ListItemText primary="Likes" />
     </ListItem>
-    <ListItem button>
+
+    <ListItem button component={Link} to="/i/follwing">
       <ListItemIcon>
         <AccountMultiple />
       </ListItemIcon>
       <ListItemText primary="Following" />
     </ListItem>
-    <ListItem button>
+
+    <ListItem button component={Link} to="/i/followers">
       <ListItemIcon>
         <AccountMultipleOutline />
       </ListItemIcon>
@@ -37,11 +41,12 @@ export const mainItems = (
 
 export const subItems = (
   <div>
-    <ListItem button>
+    <ListItem button component="a" href="https://github.com/oliverelias/twitter-gallery" to="/">
       <ListItemIcon>
         <GithubCircle />
       </ListItemIcon>
       <ListItemText primary="Github" />
     </ListItem>
+    {/* </a> */}
   </div>
 );
