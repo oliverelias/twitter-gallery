@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppHeader from './components/AppHeader';
@@ -15,23 +16,26 @@ class App extends Component {
   state = {
     mobileOpen: false,
   };
+
   handleDrawerToggle = () => {
-    console.log('Debug: Toggle Drawer');
     this.setState({ mobileOpen: !this.state.mobileOpen });
   };
+
   render() {
     const { classes } = this.props;
     return (
       <React.Fragment>
         <CssBaseline />
-        <div className={classes.root}>
-          <AppHeader handleDrawerToggle={this.handleDrawerToggle} />
-          <AppDrawer
-            mobileOpen={this.state.mobileOpen}
-            handleDrawerToggle={this.handleDrawerToggle}
-          />
-          <Gallery />
-        </div>
+        <Router>
+          <div className={classes.root}>
+            <AppHeader handleDrawerToggle={this.handleDrawerToggle} />
+            <AppDrawer
+              mobileOpen={this.state.mobileOpen}
+              handleDrawerToggle={this.handleDrawerToggle}
+            />
+            <Route path="/:user?" component={Gallery} />
+          </div>
+        </Router>
       </React.Fragment>
     );
   }

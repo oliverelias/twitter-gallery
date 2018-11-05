@@ -66,7 +66,14 @@ class Gallery extends Component {
   }
 
   componentDidMount() {
-    const url = this.state.dummy ? 'api/dummy_images' : '/api/home';
+    let url;
+    if (this.state.dummy) {
+      url = 'api/dummy_images';
+    } else {
+      console.log(this.props);
+      const source = this.props.match.params.user;
+      url = source === undefined ? 'api/home' : `api/user_timeline/${source}`;
+    }
     axios.get(url).then(res => {
       return this.setState({
         images: tweetsToImages(res.data),
