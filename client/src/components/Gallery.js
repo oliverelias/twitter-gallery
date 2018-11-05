@@ -12,7 +12,7 @@ const getImageUrl = tweet => {
     let h = obj.sizes.large.h;
     let aspect = w > h ? 'wide' : 'tall';
     return {
-      url: obj.media_url + ':small',
+      url: obj.media_url,
       aspect: aspect,
     };
   });
@@ -29,24 +29,29 @@ const styles = theme => ({
   galleryContainer: {
     padding: '0 40px',
     listStyle: 'none',
-    display: 'grid',
-    gridTemplateColumns: '200px 200px 200px 200px 200px 200px 200px',
-    gap: '16px',
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
     marginTop: '86px',
     [theme.breakpoints.up('md')]: {
       marginLeft: '240px',
     },
   },
-  cardContainer: {},
+  cardContainer: {
+    flexGrow: 1,
+  },
   card: {
+    margin: '5px',
     height: '300px',
-    width: '200px',
+    minWidth: '200px',
+    flexGrow: 1,
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center',
+    backgroundPosition: 'top left',
     '&:hover': {
       opacity: 0.85,
     },
+
     // transition: 'background-color 50ms linear',
     // '&:hover': {
     //   backgroundColor: blue[50],
@@ -54,6 +59,10 @@ const styles = theme => ({
     // },
   },
   cardImage: {},
+  wide: {
+    flexGrow: 2,
+    minWidth: '400px',
+  },
 });
 
 class Gallery extends Component {
@@ -61,7 +70,7 @@ class Gallery extends Component {
     super(props);
     this.state = {
       images: [],
-      dummy: false,
+      dummy: true,
     };
   }
 
@@ -93,29 +102,15 @@ class Gallery extends Component {
     return images.map(image => {
       let aspect = image.aspect;
       const url = image.url;
-
-      // if in last column, make aspect tall
-      if (col === 7) aspect = 'tall';
-      // set up next column position
-      aspect === 'wide' ? (col += 2) : (col += 1);
-      // if next column not in grid, reset to first
-      if (col > 7) col = 1;
-
       return (
-        <li
-          key={url}
-          className={classes.cardContainer}
-          style={{ gridColumnEnd: aspect === 'wide' ? 'span 2' : 'span 1' }}>
-          <ButtonBase focusRipple>
-            <Card
-              className={classes.card}
-              style={{
-                backgroundImage: 'url(' + url + ')',
-                width: aspect === 'wide' ? '416px' : '200px',
-              }}
-            />
-          </ButtonBase>
-        </li>
+        <ButtonBase focusRipple key={url} className={classes.cardContainer}>
+          <Card
+            className={`${classes.card} ${aspect === 'wide' ? classes.wide : ''}`}
+            style={{
+              backgroundImage: `url(${url})`,
+            }}
+          />
+        </ButtonBase>
       );
     });
   };
