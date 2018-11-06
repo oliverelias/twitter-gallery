@@ -14,6 +14,12 @@ const createTwit = (accessToken, accessSecret) => {
   });
 };
 
+const getTwitterEndpoint = async (user, url, options) => {
+  const t = createTwit(user.token, user.tokenSecret);
+  const tweets = await t.get(url, options);
+  return tweets.data;
+};
+
 module.exports = app => {
   app.get('/api/current_user', (req, res) => {
     if (req.user) {
@@ -22,7 +28,6 @@ module.exports = app => {
         displayName: req.user.displayName,
         profileImageUrl: req.user.profileImageUrl,
       };
-      console.log(userObj);
       res.send(JSON.stringify(userObj));
     } else {
       res.send(null);
@@ -31,35 +36,30 @@ module.exports = app => {
 
   app.get('/api/home', async (req, res) => {
     if (req.user) {
-      const t = createTwit(req.user.token, req.user.tokenSecret);
-      const tweets = await t.get('statuses/home_timeline', { count: 100 });
-      res.send(tweets.data);
+      const data = await getTwitterEndpoint(req.user, 'statuses/home_timeline', { count: 100 });
+      res.send(data);
     }
-    console.log('end of api home');
   });
 
   app.get('/api/user_timeline/:user', async (req, res) => {
-    const t = createTwit(req.user.token, req.user.tokenSecret);
-    const tweets = await t.get('statuses/user_timeline', {
+    const data = await getTwitterEndpoint(req.user, 'statuses/user_timeline', {
       screen_name: req.params.user,
     });
-    res.send(tweets.data);
+    res.send(data);
   });
 
   app.get('/api/user_favorites/:user', async (req, res) => {
-    const t = createTwit(req.user.token, req.user.tokenSecret);
-    const tweets = await t.get('favorites/list', {
+    const data = await getTwitterEndpoint(req.user, 'favorites/list', {
       screen_name: req.params.user,
     });
-    res.send(tweets.data);
+    res.send(data);
   });
 
   app.get('/api/search/:query', async (req, res) => {
-    const t = createTwit(req.user.token, req.user.tokenSecret);
-    const tweets = await t.get('search/tweets', {
+    const data = getTwitterEndpoint(req.user, 'search/tweets', {
       q: req.params.query,
     });
-    res.send(tweets.data);
+    res.send(data);
   });
 
   app.get('/api/dummy_images', async (req, res) => {
@@ -83,21 +83,6 @@ module.exports = app => {
         aspect: aspect,
       };
     });
-    // fileList.map(file => {
-    //   console.log(file);
-    //   return file + 'is this working';
-    //   // return {
-    //   //   extended_entities: {
-    //   //     media: [
-    //   //       {
-    //   //         w: 200,
-    //   //         h: 400,
-    //   //         media_url: file
-    //   //       }
-    //   //     ]
-    //   //   }
-    //   // }
-    // })
     res.send(fileList);
   });
 };

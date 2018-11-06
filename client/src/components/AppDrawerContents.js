@@ -9,28 +9,28 @@ import { GithubCircle, AccountMultiple, AccountMultipleOutline } from 'mdi-mater
 
 export const mainItems = (
   <div>
-    <ListItem button component={Link} to="/">
+    <ListItem button component={Link} to="/llamapox">
       <ListItemIcon>
         <HomeIcon />
       </ListItemIcon>
       <ListItemText primary="Home" />
     </ListItem>
 
-    <ListItem button component={Link} to="/i/likes">
+    <ListItem button component={Link} to="/likes">
       <ListItemIcon>
         <StarIcon />
       </ListItemIcon>
       <ListItemText primary="Likes" />
     </ListItem>
 
-    <ListItem button component={Link} to="/i/follwing">
+    <ListItem button component={Link} to="/follwing">
       <ListItemIcon>
         <AccountMultiple />
       </ListItemIcon>
       <ListItemText primary="Following" />
     </ListItem>
 
-    <ListItem button component={Link} to="/i/followers">
+    <ListItem button component={Link} to="/followers">
       <ListItemIcon>
         <AccountMultipleOutline />
       </ListItemIcon>

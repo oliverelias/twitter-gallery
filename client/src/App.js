@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppHeader from './components/AppHeader';
@@ -33,7 +33,10 @@ class App extends Component {
               mobileOpen={this.state.mobileOpen}
               handleDrawerToggle={this.handleDrawerToggle}
             />
-            <Route path="/:user?" component={Gallery} />
+            <Switch>
+              <Route exact path="/likes/:user?" render={props => <Gallery likes {...props} />} />
+              <Route exact path="/:user?" render={props => <Gallery {...props} />} />
+            </Switch>
           </div>
         </Router>
       </React.Fragment>

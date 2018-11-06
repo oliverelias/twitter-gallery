@@ -81,36 +81,52 @@ class Gallery extends Component {
   }
 
   async componentDidMount() {
-    NProgress.start();
-
+    // NProgress.start();
+    // debugger;
+    console.log('Gallery did mount');
     let url;
-    if (this.state.dummy) {
-      url = 'api/dummy_images';
+    let user = this.props.match.params.user || null;
+    if (this.props.likes) {
+      if (!user) {
+        const currentUser = await axios.get('/api/current_user');
+        if (currentUser.data) user = currentUser.data.username;
+      }
+      url = `/api/user_favorites/${user}`;
     } else {
-      const source = this.props.match.params.user;
-      url = source === undefined ? 'api/home' : `api/user_timeline/${source}`;
+      url = !user ? '/api/home' : `/api/user_timeline/${user}`;
     }
+    console.log(url);
     const res = await axios.get(url);
     this.setState({
       images: tweetsToImages(res.data),
     });
 
-    NProgress.done();
+    // NProgress.done();
   }
 
-  async componentWillReceiveProps() {
-    NProgress.start();
+  async componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.location.pathname !== this.props.location.pathname) {
+      NProgress.start();
 
-    let url;
-    console.log('Inside will receive props');
-    const source = this.props.match.params.user;
-    url = source === undefined ? 'api/home' : `api/user_timeline/${source}`;
+      let url;
+      let user = this.props.match.params.user || null;
+      if (this.props.likes) {
+        if (!user) {
+          const currentUser = await axios.get('/api/current_user');
+          if (currentUser.data) user = currentUser.data.username;
+        }
+        url = `api/user_favorites/${user}`;
+      } else {
+        url = user === undefined ? 'api/home' : `api/user_timeline/${user}`;
+      }
+      console.log(url);
+      const res = await axios.get(url);
+      this.setState({
+        images: tweetsToImages(res.data),
+      });
 
-    const res = await axios.get(url);
-    this.setState({
-      images: tweetsToImages(res.data),
-    });
-    NProgress.done();
+      NProgress.done();
+    }
   }
 
   renderImages = () => {
@@ -136,6 +152,8 @@ class Gallery extends Component {
   render() {
     const { classes } = this.props;
     const { loading } = this.state;
+    console.log('Rendering at: ' + this.props.location.pathname);
+    console.log(`Likes?: ${this.props.likes ? 'Yes' : 'No'}`);
     return (
       <div>
         <div className={classes.galleryContainer}>
