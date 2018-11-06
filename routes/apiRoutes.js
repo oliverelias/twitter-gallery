@@ -41,7 +41,6 @@ module.exports = app => {
   app.get('/api/user_timeline/:user', async (req, res) => {
     const t = createTwit(req.user.token, req.user.tokenSecret);
     const tweets = await t.get('statuses/user_timeline', {
-      count: 200,
       screen_name: req.params.user,
     });
     res.send(tweets.data);

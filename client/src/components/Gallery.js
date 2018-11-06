@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Loading from './Loading';
+import NProgress from 'nprogress';
 import axios from 'axios';
 
 const getImageUrl = tweet => {
@@ -40,6 +41,9 @@ const styles = theme => ({
   },
   cardContainer: {
     flexGrow: 1,
+    '&:last-child': {
+      flexGrow: 0,
+    },
   },
   card: {
     margin: '5px',
@@ -76,7 +80,9 @@ class Gallery extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    NProgress.start();
+
     let url;
     if (this.state.dummy) {
       url = 'api/dummy_images';
@@ -84,28 +90,27 @@ class Gallery extends Component {
       const source = this.props.match.params.user;
       url = source === undefined ? 'api/home' : `api/user_timeline/${source}`;
     }
-    axios.get(url).then(res => {
-      return this.setState({
-        images: tweetsToImages(res.data),
-      });
+    const res = await axios.get(url);
+    this.setState({
+      images: tweetsToImages(res.data),
     });
+
+    NProgress.done();
   }
 
-  componentWillReceiveProps() {
-    this.setState({
-      loading: true,
-    });
+  async componentWillReceiveProps() {
+    NProgress.start();
+
     let url;
     console.log('Inside will receive props');
     const source = this.props.match.params.user;
     url = source === undefined ? 'api/home' : `api/user_timeline/${source}`;
 
-    axios.get(url).then(res => {
-      return this.setState({
-        images: tweetsToImages(res.data),
-        loading: false,
-      });
+    const res = await axios.get(url);
+    this.setState({
+      images: tweetsToImages(res.data),
     });
+    NProgress.done();
   }
 
   renderImages = () => {
