@@ -14,7 +14,7 @@ const getImageUrl = tweet => {
     let h = obj.sizes.large.h;
     let aspect = w > h ? 'wide' : 'tall';
     return {
-      url: obj.media_url,
+      url: obj.media_url + ':small',
       aspect: aspect,
     };
   });
