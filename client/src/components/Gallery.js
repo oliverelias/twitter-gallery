@@ -52,7 +52,7 @@ const styles = theme => ({
     flexGrow: 1,
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'top left',
+    backgroundPosition: 'top center',
     '&:hover': {
       opacity: 0.85,
     },

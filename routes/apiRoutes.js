@@ -16,7 +16,7 @@ const createTwit = (accessToken, accessSecret) => {
 
 const getTwitterEndpoint = async (user, url, options) => {
   const t = createTwit(user.token, user.tokenSecret);
-  const tweets = await t.get(url, options);
+  const tweets = await t.get(url, { ...options, count: 200 });
   return tweets.data;
 };
 
