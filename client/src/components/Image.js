@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { Hidden } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 const styles = theme => {
   const width = theme.spacing.unit * 20;
@@ -44,12 +45,14 @@ const styles = theme => {
       },
     },
     actions: {
-      display: 'flex',
+      display: 'none',
       justifyContent: 'flex-end',
       background: 'white',
       visibility: 'hidden',
       width: '100%',
-      '& > *': {},
+      [theme.breakpoints.up('md')]: {
+        display: 'flex',
+      },
     },
     content: {
       flexGrow: 1,
@@ -74,6 +77,9 @@ const styles = theme => {
         maxHeight: window.innerHeight - height - 32 + 'px',
         objectFit: 'cover',
         overflow: 'hidden',
+      },
+      button: {
+        textDecoration: 'none',
       },
     },
   };
@@ -109,10 +115,14 @@ class Image extends Component {
           />
           <CardActions className={classes.actions}>
             <Button size="small" color="primary">
-              Retweet
-            </Button>
-            <Button size="small" color="primary">
               Like
+            </Button>
+            <Button
+              href={`https://twitter.com/statuses/${tweet.id}`}
+              size="small"
+              color="primary"
+              className={classes.button}>
+              Original
             </Button>
           </CardActions>
         </Card>

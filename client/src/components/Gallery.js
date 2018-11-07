@@ -13,10 +13,13 @@ const styles = theme => ({
     },
   },
   gallery: {
-    padding: '0 40px',
+    padding: `0 ${theme.spacing.unit}px`,
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+    [theme.breakpoints.up('md')]: {
+      padding: `0 ${theme.spacing.unit * 5}px`,
+    },
   },
 });
 
