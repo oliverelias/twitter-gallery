@@ -3,18 +3,17 @@ import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = theme => ({
-  progress: {
-    margin: '0 auto',
-    [theme.breakpoints.up('md')]: {
-      paddingRight: '240px',
-    },
+  loading: {
+    margin: theme.spacing.unit * 2,
+    display: 'flex',
+    justifyContent: 'center',
   },
 });
 
 const Loading = props => {
   const { classes } = props;
   return (
-    <div className={classes.progress}>
+    <div className={classes.loading}>
       <CircularProgress />
     </div>
   );

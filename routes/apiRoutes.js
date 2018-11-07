@@ -14,13 +14,42 @@ const createTwit = (accessToken, accessSecret) => {
   });
 };
 
+const simplifyTweet = tweet => {
+  if (!tweet.extended_entities) return null;
+  if (!tweet.extended_entities.media) return null;
+  return {
+    id: tweet.id_str,
+    text: tweet.text,
+    favorited: tweet.favorited,
+    retweeted: tweet.retweeted,
+    possibly_sensitive: tweet.possibly_sensitive,
+    images: [
+      ...tweet.extended_entities.media.map(image => {
+        return {
+          url: image.media_url_https,
+          url_small: `${image.media_url_https}:small`,
+          aspect: image.sizes.large.w > image.sizes.large.h ? 'wide' : 'tall',
+        };
+      }),
+    ],
+  };
+};
+
 const getTwitterEndpoint = async (user, url, options) => {
   const t = createTwit(user.token, user.tokenSecret);
-  const tweets = await t.get(url, { ...options, count: 200 });
-  return tweets.data;
+  const tweets = await t.get(url, { count: 100, ...options });
+  return {
+    first_id: tweets.data[0].id_str,
+    last_id: tweets.data[tweets.data.length - 1].id_str,
+    tweets: tweets.data.map(tweet => simplifyTweet(tweet)).filter(tweet => tweet),
+  };
 };
 
 module.exports = app => {
+  /**
+   * Returns basic information on logged in user
+   * or null if none
+   */
   app.get('/api/current_user', (req, res) => {
     if (req.user) {
       userObj = {
@@ -34,9 +63,15 @@ module.exports = app => {
     }
   });
 
+  /**
+   * Returns
+   */
   app.get('/api/home', async (req, res) => {
     if (req.user) {
-      const data = await getTwitterEndpoint(req.user, 'statuses/home_timeline', { count: 100 });
+      const data = await getTwitterEndpoint(req.user, 'statuses/home_timeline', {
+        count: 200,
+        ...req.query,
+      });
       res.send(data);
     }
   });
@@ -44,6 +79,7 @@ module.exports = app => {
   app.get('/api/user_timeline/:user', async (req, res) => {
     const data = await getTwitterEndpoint(req.user, 'statuses/user_timeline', {
       screen_name: req.params.user,
+      ...req.query,
     });
     res.send(data);
   });
@@ -51,6 +87,7 @@ module.exports = app => {
   app.get('/api/user_favorites/:user', async (req, res) => {
     const data = await getTwitterEndpoint(req.user, 'favorites/list', {
       screen_name: req.params.user,
+      ...req.query,
     });
     res.send(data);
   });
