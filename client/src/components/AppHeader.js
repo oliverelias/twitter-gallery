@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
 import MenuIcon from '@material-ui/icons/Menu';
+import Search from './Search';
 import axios from 'axios';
 
 const styles = theme => ({
@@ -80,6 +81,7 @@ class AppHeader extends Component {
           <Typography variant="title" color="inherit" className={classes.flex}>
             Twitter Gallery
           </Typography>
+          <Search />
           <Button href={authenticated ? '/auth/logout' : '/auth/authenticate'} color="inherit">
             {authenticated ? displayName : 'Login with Twitter'}
           </Button>
