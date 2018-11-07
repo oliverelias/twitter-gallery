@@ -16,8 +16,8 @@ const createTwit = (user, appOnly) => {
   return new twit({
     consumer_key: config.TWITTER_CONSUMER_KEY,
     consumer_secret: config.TWITTER_CONSUMER_SECRET,
-    access_token: user.accessToken,
-    access_token_secret: user.accessSecret,
+    access_token: user.token,
+    access_token_secret: user.tokenSecret,
     timeout: 60 * 1000,
   });
 };
