@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -81,12 +82,18 @@ class AppHeader extends Component {
           <Typography variant="title" color="inherit" className={classes.flex}>
             Twitter Gallery
           </Typography>
-          <Search />
-          <Button href={authenticated ? '/auth/logout' : '/auth/authenticate'} color="inherit">
+          <Route component={Search} />
+          <Button
+            href={authenticated ? '/auth/logout' : '/auth/authenticate'}
+            color="inherit">
             {authenticated ? displayName : 'Login with Twitter'}
           </Button>
           {authenticated ? (
-            <Avatar alt={displayName} src={profileImageUrl} className={classes.profileImage} />
+            <Avatar
+              alt={displayName}
+              src={profileImageUrl}
+              className={classes.profileImage}
+            />
           ) : null}
         </Toolbar>
       </AppBar>

@@ -2,8 +2,6 @@ import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import CardContent from '@material-ui/core/CardContent';
-import ButtonBase from '@material-ui/core/ButtonBase';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -57,7 +55,9 @@ const Image = props => {
   return (
     <div className={classes.cardContainer}>
       <Card
-        className={`${classes.card} ${image.aspect === 'wide' ? classes.wide : ''}`}
+        className={`${classes.card} ${
+          image.aspect === 'wide' ? classes.wide : ''
+        }`}
         style={{
           backgroundImage: `url(${image.url_small})`,
         }}>

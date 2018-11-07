@@ -5,11 +5,15 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import StarIcon from '@material-ui/icons/Star';
 import HomeIcon from '@material-ui/icons/Home';
-import { GithubCircle, AccountMultiple, AccountMultipleOutline } from 'mdi-material-ui';
+import {
+  GithubCircle,
+  AccountMultiple,
+  AccountMultipleOutline,
+} from 'mdi-material-ui';
 
 export const mainItems = (
   <div>
-    <ListItem button component={Link} to="/llamapox">
+    <ListItem button component={Link} to="/">
       <ListItemIcon>
         <HomeIcon />
       </ListItemIcon>
@@ -23,7 +27,7 @@ export const mainItems = (
       <ListItemText primary="Likes" />
     </ListItem>
 
-    <ListItem button component={Link} to="/follwing">
+    <ListItem button component={Link} to="/following">
       <ListItemIcon>
         <AccountMultiple />
       </ListItemIcon>
@@ -41,7 +45,11 @@ export const mainItems = (
 
 export const subItems = (
   <div>
-    <ListItem button component="a" href="https://github.com/oliverelias/twitter-gallery" to="/">
+    <ListItem
+      button
+      component="a"
+      href="https://github.com/oliverelias/twitter-gallery"
+      to="/">
       <ListItemIcon>
         <GithubCircle />
       </ListItemIcon>

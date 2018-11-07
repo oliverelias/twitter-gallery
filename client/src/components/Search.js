@@ -4,6 +4,8 @@ import Input from '@material-ui/core/Input';
 import SearchIcon from '@material-ui/icons/Search';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import propTypes from 'prop-types';
 
 const styles = theme => ({
   search: {
@@ -62,21 +64,18 @@ class Search extends Component {
     });
   };
 
-  onSubmit = e => {
-    this.setState({
-      submit: true,
-    });
-  };
-
   render() {
     const { classes } = this.props;
     return (
       <div className={classes.search}>
-        {this.state.submit && <Redirect push to={`/${this.state.search}`} />}
         <div className={classes.searchIcon}>
           <SearchIcon />
         </div>
-        <form onSubmit={this.onSubmit}>
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            this.props.history.push(`/${this.state.search}`);
+          }}>
           <Input
             placeholder="Search…"
             disableUnderline
@@ -93,5 +92,11 @@ class Search extends Component {
     );
   }
 }
+
+Search.contextTypes = {
+  history: propTypes.shape({
+    push: propTypes.func.isRequired,
+  }),
+};
 
 export default withStyles(styles)(Search);

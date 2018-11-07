@@ -51,7 +51,9 @@ const getTwitterEndpoint = async (user, url, options) => {
   return {
     first_id: tweets.data[0].id_str,
     last_id: tweets.data[tweets.data.length - 1].id_str,
-    tweets: tweets.data.map(tweet => simplifyTweet(tweet)).filter(tweet => tweet),
+    tweets: tweets.data
+      .map(tweet => simplifyTweet(tweet))
+      .filter(tweet => tweet),
   };
 };
 
@@ -78,10 +80,14 @@ module.exports = app => {
    */
   app.get('/api/home', async (req, res) => {
     if (req.user) {
-      const data = await getTwitterEndpoint(req.user, 'statuses/home_timeline', {
-        count: 200,
-        ...req.query,
-      });
+      const data = await getTwitterEndpoint(
+        req.user,
+        'statuses/home_timeline',
+        {
+          count: 200,
+          ...req.query,
+        }
+      );
       res.send(data);
     }
   });
@@ -110,26 +116,28 @@ module.exports = app => {
   });
 
   app.get('/api/dummy_images', async (req, res) => {
-    const fileList = await fs.readdirSync('./client/public/dummy_images/small').map(file => {
-      let dimensions = sizeOf('./client/public/dummy_images/small/' + file);
-      let aspect = dimensions.width > dimensions.height ? 'wide' : 'tall';
-      return {
-        extended_entities: {
-          media: [
-            {
-              media_url: '/dummy_images/small/' + file,
-              sizes: {
-                large: {
-                  w: dimensions.width,
-                  h: dimensions.height,
+    const fileList = await fs
+      .readdirSync('./client/public/dummy_images/small')
+      .map(file => {
+        let dimensions = sizeOf('./client/public/dummy_images/small/' + file);
+        let aspect = dimensions.width > dimensions.height ? 'wide' : 'tall';
+        return {
+          extended_entities: {
+            media: [
+              {
+                media_url: '/dummy_images/small/' + file,
+                sizes: {
+                  large: {
+                    w: dimensions.width,
+                    h: dimensions.height,
+                  },
                 },
               },
-            },
-          ],
-        },
-        aspect: aspect,
-      };
-    });
+            ],
+          },
+          aspect: aspect,
+        };
+      });
     res.send(fileList);
   });
 };

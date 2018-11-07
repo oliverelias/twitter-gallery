@@ -33,10 +33,11 @@ class App extends Component {
               mobileOpen={this.state.mobileOpen}
               handleDrawerToggle={this.handleDrawerToggle}
             />
-            <Switch>
-              <Route exact path="/likes/:user?" render={props => <Gallery likes {...props} />} />
-              <Route exact path="/:user?" render={props => <Gallery {...props} />} />
-            </Switch>
+            <Route
+              exact
+              path="/:user?/:likes?"
+              render={props => <Gallery {...props} />}
+            />
           </div>
         </Router>
       </React.Fragment>

@@ -36,63 +36,66 @@ class Gallery extends Component {
     const documentHeight = document.documentElement.offsetHeight;
     const scroll = document.documentElement.scrollTop;
     if (windowHeight + scroll >= documentHeight) {
-      if (!this.state.loadingMoreImages) this.setState({ loadingMoreImages: true });
+      if (!this.state.loadingMoreImages)
+        this.setState({ loadingMoreImages: true });
     }
+  };
+
+  createUrl = () => {
+    const { params } = this.props.match;
+
+    if (!params.user) return '/api/home';
+
+    const path =
+      params.likes && params.likes.toLowerCase() === 'likes'
+        ? 'user_favorites'
+        : 'user_timeline';
+    return `/api/${path}/${params.user}`;
   };
 
   // TODO: Seperate url logic from lifecycle methods and
   // make updating consistent across pages.
   async componentDidMount() {
-    // NProgress.start();
-    //
     window.addEventListener('scroll', this.handleScroll);
 
-    let url;
-    let user = this.props.match.params.user || null;
-    if (this.props.likes) {
-      if (!user) {
-        const currentUser = await axios.get('/api/current_user');
-        if (currentUser.data) user = currentUser.data.username;
-      }
-      url = `/api/user_favorites/${user}`;
-    } else {
-      url = !user ? '/api/home' : `/api/user_timeline/${user}`;
-    }
-    const res = await axios.get(url);
+    const apiPath = this.createUrl();
+    const res = await axios.get(apiPath);
 
     this.setState({
       tweets: res.data.tweets,
       lastId: res.data.last_id,
     });
-
-    // NProgress.done();
   }
 
   async componentDidUpdate(prevProps, prevState, snapshot) {
     if (
       prevProps.location.pathname === this.props.location.pathname &&
       !this.state.loadingMoreImages
-    )
+    ) {
       return;
+    }
 
+    // Dont show progress bar if just loading new images
     if (!this.state.loadingMoreImages) NProgress.start();
 
-    let url;
-    let user = this.props.match.params.user || null;
-    if (this.props.likes) {
-      if (!user) {
-        const currentUser = await axios.get('/api/current_user');
-        if (currentUser.data) user = currentUser.data.username;
-      }
-      url = `/api/user_favorites/${user}`;
-    } else {
-      url = !user ? '/api/home' : `/api/user_timeline/${user}`;
+    // If we're loading a new route remove previous images
+    if (prevProps.location.pathname !== this.props.location.pathname) {
+      // await this so we dont fetch new tweets with old max_id
+      await this.setState({
+        tweets: [],
+        lastId: null,
+      });
     }
-    if (this.state.lastId) url += `?max_id=${this.state.lastId}`;
-    const res = await axios.get(url);
+
+    let apiUrl = this.createUrl();
+    if (this.state.lastId) apiUrl += `?max_id=${this.state.lastId}`;
+
+    const res = await axios.get(apiUrl);
     const oldTweets = this.state.tweets;
+
     this.setState({
-      tweets: oldTweets.concat(res.data.tweets.splice(1)),
+      // append new tweets to old ones
+      tweets: this.state.tweets.concat(res.data.tweets.splice(1)),
       loadingMoreImages: false,
       lastId: res.data.last_id,
     });
@@ -104,7 +107,9 @@ class Gallery extends Component {
     const { tweets } = this.state;
 
     return tweets.map(tweet => {
-      return tweet.images.map(image => <Image key={image.url} tweet={tweet} image={image} />);
+      return tweet.images.map(image => (
+        <Image key={image.url} tweet={tweet} image={image} />
+      ));
     });
   };
 
