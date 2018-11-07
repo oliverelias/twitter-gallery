@@ -4,12 +4,20 @@ const fs = require('fs');
 const config = require('../config/config.js');
 const sizeOf = require('image-size');
 
-const createTwit = (accessToken, accessSecret) => {
+const createTwit = (user, appOnly) => {
+  if (appOnly) {
+    return new twit({
+      consumer_key: config.TWITTER_CONSUMER_KEY,
+      consumer_secret: config.TWITTER_CONSUMER_SECRET,
+      app_only_auth: true,
+      timeout: 60 * 1000,
+    });
+  }
   return new twit({
     consumer_key: config.TWITTER_CONSUMER_KEY,
     consumer_secret: config.TWITTER_CONSUMER_SECRET,
-    access_token: accessToken,
-    access_token_secret: accessSecret,
+    access_token: user.accessToken,
+    access_token_secret: user.accessSecret,
     timeout: 60 * 1000,
   });
 };
@@ -36,7 +44,9 @@ const simplifyTweet = tweet => {
 };
 
 const getTwitterEndpoint = async (user, url, options) => {
-  const t = createTwit(user.token, user.tokenSecret);
+  const appOnly = !user ? true : false;
+  console.log(`App only?: ${appOnly}`);
+  const t = createTwit(user, appOnly);
   const tweets = await t.get(url, { count: 100, ...options });
   return {
     first_id: tweets.data[0].id_str,
