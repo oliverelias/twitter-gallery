@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-
 import Image from './Image';
 import Loading from './Loading';
 import NProgress from 'nprogress';
@@ -22,42 +21,16 @@ const styles = theme => ({
 });
 
 class Gallery extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      tweets: [],
-      lastId: null,
-      loadingMoreImages: false,
-    };
-  }
-
-  handleScroll = e => {
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.offsetHeight;
-    const scroll = document.documentElement.scrollTop;
-    if (windowHeight + scroll >= documentHeight) {
-      if (!this.state.loadingMoreImages)
-        this.setState({ loadingMoreImages: true });
-    }
+  state = {
+    tweets: [],
+    lastId: null,
+    loadingMoreImages: false,
   };
 
-  createUrl = () => {
-    const { params } = this.props.match;
-
-    if (!params.user) return '/api/home';
-
-    const path =
-      params.likes && params.likes.toLowerCase() === 'likes'
-        ? 'user_favorites'
-        : 'user_timeline';
-    return `/api/${path}/${params.user}`;
-  };
-
-  // TODO: Seperate url logic from lifecycle methods and
-  // make updating consistent across pages.
   async componentDidMount() {
     window.addEventListener('scroll', this.handleScroll);
 
+    // Get set of tweets based on current route
     const apiPath = this.createUrl();
     const res = await axios.get(apiPath);
 
@@ -91,7 +64,6 @@ class Gallery extends Component {
     if (this.state.lastId) apiUrl += `?max_id=${this.state.lastId}`;
 
     const res = await axios.get(apiUrl);
-    const oldTweets = this.state.tweets;
 
     this.setState({
       // append new tweets to old ones
@@ -102,6 +74,35 @@ class Gallery extends Component {
 
     NProgress.done();
   }
+
+  /**
+   * Set state to load more images when scrolled to bottom of page
+   */
+  handleScroll = e => {
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.offsetHeight;
+    const scroll = document.documentElement.scrollTop;
+    if (windowHeight + scroll >= documentHeight) {
+      if (!this.state.loadingMoreImages)
+        this.setState({ loadingMoreImages: true });
+    }
+  };
+
+  /**
+   * Create an URL based on current route
+   * if no route will default to the home timeline
+   */
+  createUrl = () => {
+    const { params } = this.props.match;
+
+    if (!params.user) return '/api/home';
+
+    const path =
+      params.likes && params.likes.toLowerCase() === 'likes'
+        ? 'user_favorites'
+        : 'user_timeline';
+    return `/api/${path}/${params.user}`;
+  };
 
   renderImages = () => {
     const { tweets } = this.state;

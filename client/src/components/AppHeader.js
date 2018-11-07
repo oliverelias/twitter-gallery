@@ -33,42 +33,13 @@ const styles = theme => ({
 });
 
 class AppHeader extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      authenticated: false,
-      username: '',
-      displayName: '',
-      profileImageUrl: '',
-    };
-  }
-
-  getAuthentication = () => {
-    axios.get('/api/current_user').then(user => {
-      if (user.data) {
-        return this.setState({
-          authenticated: true,
-          username: user.data.username,
-          displayName: user.data.displayName,
-          profileImageUrl: user.data.profileImageUrl,
-        });
-      } else {
-        return this.setState({ authenticated: false });
-      }
-    });
-  };
-
-  componentDidMount() {
-    this.getAuthentication();
-  }
-
   renderButton() {
     return <div />;
   }
 
   render() {
-    const { classes } = this.props;
-    const { authenticated, displayName, profileImageUrl } = this.state;
+    const { classes, authenticated, displayName, profileImageUrl } = this.props;
+
     return (
       <AppBar className={classes.appHeaderRoot}>
         <Toolbar>

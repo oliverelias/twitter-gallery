@@ -22,7 +22,7 @@ const AppDrawer = props => {
     <div className={classes.drawerItems}>
       <div className={classes.toolbar} />
       <Divider />
-      <List>{mainItems}</List>
+      <List>{mainItems(props.username)}</List>
       <Divider />
       <List>{subItems}</List>
     </div>

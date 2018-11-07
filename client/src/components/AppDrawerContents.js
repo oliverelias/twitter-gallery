@@ -11,37 +11,39 @@ import {
   AccountMultipleOutline,
 } from 'mdi-material-ui';
 
-export const mainItems = (
-  <div>
-    <ListItem button component={Link} to="/">
-      <ListItemIcon>
-        <HomeIcon />
-      </ListItemIcon>
-      <ListItemText primary="Home" />
-    </ListItem>
+export const mainItems = username => {
+  return (
+    <div>
+      <ListItem button component={Link} to="/">
+        <ListItemIcon>
+          <HomeIcon />
+        </ListItemIcon>
+        <ListItemText primary="Home" />
+      </ListItem>
 
-    <ListItem button component={Link} to="/likes">
-      <ListItemIcon>
-        <StarIcon />
-      </ListItemIcon>
-      <ListItemText primary="Likes" />
-    </ListItem>
+      <ListItem button component={Link} to={`/${username}/likes`}>
+        <ListItemIcon>
+          <StarIcon />
+        </ListItemIcon>
+        <ListItemText primary="Likes" />
+      </ListItem>
 
-    <ListItem button component={Link} to="/following">
-      <ListItemIcon>
-        <AccountMultiple />
-      </ListItemIcon>
-      <ListItemText primary="Following" />
-    </ListItem>
+      <ListItem button component={Link} to="/following">
+        <ListItemIcon>
+          <AccountMultiple />
+        </ListItemIcon>
+        <ListItemText primary="Following" />
+      </ListItem>
 
-    <ListItem button component={Link} to="/followers">
-      <ListItemIcon>
-        <AccountMultipleOutline />
-      </ListItemIcon>
-      <ListItemText primary="Followers" />
-    </ListItem>
-  </div>
-);
+      <ListItem button component={Link} to="/followers">
+        <ListItemIcon>
+          <AccountMultipleOutline />
+        </ListItemIcon>
+        <ListItemText primary="Followers" />
+      </ListItem>
+    </div>
+  );
+};
 
 export const subItems = (
   <div>
