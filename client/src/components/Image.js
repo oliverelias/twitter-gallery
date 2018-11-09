@@ -6,6 +6,11 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
+import {
+  TwitterRetweet,
+  Heart as HeartIcon,
+  Link as LinkIcon,
+} from 'mdi-material-ui';
 import { Hidden } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
@@ -65,18 +70,13 @@ const styles = theme => {
     },
 
     paper: {
-      position: 'absolute',
       margin: 'auto',
-      maxWidth: window.innerWidth - width + 'px',
-      maxHeight: window.innerHeight - height + 'px',
       backgroundColor: theme.palette.background.paper,
       boxShadow: theme.shadows[5],
-      padding: theme.spacing.unit * 2,
+      padding: theme.spacing.unit,
       '& img': {
-        maxWidth: window.innerWidth - width - 32 + 'px',
-        maxHeight: window.innerHeight - height - 32 + 'px',
-        objectFit: 'cover',
-        overflow: 'hidden',
+        maxWidth: '75vw',
+        maxHeight: '75vh',
       },
       button: {
         textDecoration: 'none',
@@ -115,14 +115,19 @@ class Image extends Component {
           />
           <CardActions className={classes.actions}>
             <Button size="small" color="primary">
-              Like
+              <TwitterRetweet />
+            </Button>
+            <Button size="small" color="primary">
+              <HeartIcon style={{ width: '0.7em' }} />
             </Button>
             <Button
               href={`https://twitter.com/statuses/${tweet.id}`}
+              target="_blank"
+              rel="noopener"
               size="small"
               color="primary"
               className={classes.button}>
-              Original
+              <LinkIcon />
             </Button>
           </CardActions>
         </Card>
