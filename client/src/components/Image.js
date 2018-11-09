@@ -8,7 +8,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import {
   TwitterRetweet,
-  Heart as HeartIcon,
+  HeartOutline as HeartOutlineIcon,
   Link as LinkIcon,
 } from 'mdi-material-ui';
 import { Hidden } from '@material-ui/core';
@@ -57,6 +57,9 @@ const styles = theme => {
       width: '100%',
       [theme.breakpoints.up('md')]: {
         display: 'flex',
+      },
+      '& > *': {
+        minWidth: '48px',
       },
     },
     content: {
@@ -118,7 +121,7 @@ class Image extends Component {
               <TwitterRetweet />
             </Button>
             <Button size="small" color="primary">
-              <HeartIcon style={{ width: '0.7em' }} />
+              <HeartOutlineIcon style={{ width: '0.8em' }} />
             </Button>
             <Button
               href={`https://twitter.com/statuses/${tweet.id}`}
