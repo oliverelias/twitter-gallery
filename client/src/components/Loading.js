@@ -7,15 +7,14 @@ const styles = theme => ({
     margin: theme.spacing.unit * 2,
     display: 'flex',
     justifyContent: 'center',
+    minHeight: '48px',
   },
 });
 
 const Loading = props => {
-  const { classes } = props;
+  const { classes, active } = props;
   return (
-    <div className={classes.loading}>
-      <CircularProgress />
-    </div>
+    <div className={classes.loading}>{active && <CircularProgress />}</div>
   );
 };
 

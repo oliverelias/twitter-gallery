@@ -76,6 +76,7 @@ class Gallery extends Component {
     });
 
     NProgress.done();
+    console.log(this.state.tweets);
   }
 
   /**
@@ -123,7 +124,7 @@ class Gallery extends Component {
     return (
       <div className={classes.galleryContainer}>
         <div className={classes.gallery}>{this.renderImages()}</div>
-        {loadingMoreImages && <Loading />}
+        <Loading active={loadingMoreImages} />
       </div>
     );
   }
