@@ -76,7 +76,6 @@ class Gallery extends Component {
     });
 
     NProgress.done();
-    console.log(this.state.tweets);
   }
 
   /**

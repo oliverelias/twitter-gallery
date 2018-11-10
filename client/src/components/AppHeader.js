@@ -15,8 +15,12 @@ const styles = theme => ({
   appHeaderRoot: {
     zIndex: theme.zIndex.drawer + 1,
   },
-  flex: {
+  largeTitle: {
     flexGrow: 1,
+    display: 'none',
+    [theme.breakpoints.up('md')]: {
+      display: 'initial',
+    },
   },
   menuButton: {
     marginLeft: -12,
@@ -50,7 +54,10 @@ class AppHeader extends Component {
             aria-label="Menu">
             <MenuIcon />
           </IconButton>
-          <Typography variant="title" color="inherit" className={classes.flex}>
+          <Typography
+            variant="h6"
+            color="inherit"
+            className={classes.largeTitle}>
             Twitter Gallery
           </Typography>
           <Route component={Search} />

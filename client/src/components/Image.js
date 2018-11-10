@@ -5,14 +5,17 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
+
 import {
   TwitterRetweet,
+  Heart as HeartIcon,
   HeartOutline as HeartOutlineIcon,
   Link as LinkIcon,
 } from 'mdi-material-ui';
+import { green, red } from '@material-ui/core/colors';
 import { Hidden } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import ImageModal from './ImageModal';
 
 const styles = theme => {
   const width = theme.spacing.unit * 20;
@@ -26,8 +29,9 @@ const styles = theme => {
     },
     card: {
       margin: '5px',
-      height: '150px',
-      minWidth: '100px',
+      height: '120px',
+      minWidth: '80px',
+      maxWidth: '500px',
       flexGrow: 1,
       display: 'flex',
       flexDirection: 'column',
@@ -44,7 +48,7 @@ const styles = theme => {
       },
     },
     wide: {
-      minWidth: '150px',
+      minWidth: '120px',
       [theme.breakpoints.up('md')]: {
         minWidth: '350px',
       },
@@ -58,32 +62,15 @@ const styles = theme => {
       [theme.breakpoints.up('md')]: {
         display: 'flex',
       },
-      '& > *': {
-        minWidth: '48px',
+    },
+    actionButton: {
+      minWidth: '48px',
+      '& svg': {
+        opacity: 0.4,
       },
     },
     content: {
       flexGrow: 1,
-    },
-
-    modal: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-
-    paper: {
-      margin: 'auto',
-      backgroundColor: theme.palette.background.paper,
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing.unit,
-      '& img': {
-        maxWidth: '75vw',
-        maxHeight: '75vh',
-      },
-      button: {
-        textDecoration: 'none',
-      },
     },
   };
 };
@@ -98,11 +85,14 @@ class Image extends Component {
   };
 
   handleClose = () => {
+    console.log('close modal');
     this.setState({ open: false });
   };
 
   render() {
     const { classes, tweet, image } = this.props;
+    const retweetStyle = { color: green[700], opacity: 1 };
+    const likeStyle = { color: red[500], opacity: 1 };
     return (
       <div className={classes.cardContainer}>
         <Card
@@ -117,11 +107,21 @@ class Image extends Component {
             onClick={this.handleOpen}
           />
           <CardActions className={classes.actions}>
-            <Button size="small" color="primary">
-              <TwitterRetweet />
+            <Button
+              size="small"
+              color="primary"
+              className={classes.actionButton}>
+              <TwitterRetweet style={tweet.retweeted ? retweetStyle : null} />
             </Button>
-            <Button size="small" color="primary">
-              <HeartOutlineIcon style={{ width: '0.8em' }} />
+            <Button
+              size="small"
+              color="primary"
+              className={classes.actionButton}>
+              {tweet.favorited ? (
+                <HeartIcon style={{ ...likeStyle, width: '0.8em' }} />
+              ) : (
+                <HeartOutlineIcon style={{ width: '0.8em' }} />
+              )}
             </Button>
             <Button
               href={`https://twitter.com/statuses/${tweet.id}`}
@@ -129,12 +129,15 @@ class Image extends Component {
               rel="noopener"
               size="small"
               color="primary"
-              className={classes.button}>
-              <LinkIcon />
+              className={classes.actionButton}>
+              <LinkIcon style={{ opacity: 1 }} />
             </Button>
           </CardActions>
         </Card>
-        <Modal
+        {this.state.open && (
+          <ImageModal handleClose={this.handleClose} image={image} />
+        )}
+        {/* <Modal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
           open={this.state.open}
@@ -143,7 +146,7 @@ class Image extends Component {
           <div className={classes.paper}>
             <img src={image.url} alt="" />
           </div>
-        </Modal>
+        </Modal> */}
       </div>
     );
   }
