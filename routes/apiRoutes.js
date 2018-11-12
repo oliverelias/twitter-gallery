@@ -47,7 +47,7 @@ const getTwitterEndpoint = async (user, url, options) => {
   const appOnly = !user ? true : false;
   console.log(`App only?: ${appOnly}`);
   const t = createTwit(user, appOnly);
-  const tweets = await t.get(url, { count: 100, ...options });
+  const tweets = await t.get(url, { count: 15, ...options });
   return {
     first_id: tweets.data[0].id_str,
     last_id: tweets.data[tweets.data.length - 1].id_str,
@@ -113,6 +113,58 @@ module.exports = app => {
       q: req.params.query,
     });
     res.send(data);
+  });
+
+  app.get('/api/retweet/:id', async (req, res) => {
+    try {
+      const t = createTwit(req.user);
+      const data = await t.post('statuses/retweet/:id', {
+        id: req.params.id,
+        trim_user: true,
+      });
+      res.send(data);
+    } catch (e) {
+      res.send({ error: true, error_details: e });
+    }
+  });
+
+  app.get('/api/unretweet/:id', async (req, res) => {
+    try {
+      const t = createTwit(req.user);
+      const data = await t.post('statuses/unretweet/:id', {
+        id: req.params.id,
+        include_entities: false,
+      });
+      res.send(data);
+    } catch (e) {
+      res.send({ error: true, error_details: e });
+    }
+  });
+
+  app.get('/api/favorite/:id', async (req, res) => {
+    try {
+      const t = createTwit(req.user);
+      const data = await t.post('favorites/create', {
+        id: req.params.id,
+        include_entities: false,
+      });
+      res.send(data);
+    } catch (e) {
+      res.send({ error: true, error_details: e });
+    }
+  });
+
+  app.get('/api/unfavorite/:id', async (req, res) => {
+    try {
+      const t = createTwit(req.user);
+      const data = await t.post('favorites/destroy', {
+        id: req.params.id,
+        include_entities: false,
+      });
+      res.send(data);
+    } catch (e) {
+      res.send({ error: true, error_details: e });
+    }
   });
 
   app.get('/api/dummy_images', async (req, res) => {
