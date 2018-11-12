@@ -47,7 +47,7 @@ const getTwitterEndpoint = async (user, url, options) => {
   const appOnly = !user ? true : false;
   console.log(`App only?: ${appOnly}`);
   const t = createTwit(user, appOnly);
-  const tweets = await t.get(url, { count: 15, ...options });
+  const tweets = await t.get(url, { count: 100, ...options });
   return {
     first_id: tweets.data[0].id_str,
     last_id: tweets.data[tweets.data.length - 1].id_str,
