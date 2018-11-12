@@ -12,6 +12,7 @@ import {
 } from 'mdi-material-ui';
 import { green, red } from '@material-ui/core/colors';
 import ImageModal from './ImageModal';
+import axios from 'axios';
 
 const styles = theme => {
   const width = theme.spacing.unit * 20;
@@ -105,15 +106,44 @@ class Image extends Component {
   };
 
   handleLike = () => {
-    this.setState({
+    if (!this.state.liked) {
+      axios.get(`/api/favorite/${this.props.tweet.id}`).then(res => {
+        if (res.data.error) {
+          if (res.data.error_details.code === 139) return;
+          else {
+            console.log(res.data.error_details);
+          }
+        }
+      });
+    } else {
+      axios.get(`/api/unfavorite/${this.props.tweet.id}`).then(res => {
+        if (res.data.error) {
+          console.log(res.data.error_details);
+        }
+      });
+    }
+    this.setState(state => ({
       liked: !this.state.liked,
-    });
+    }));
   };
 
   handleRetweet = () => {
-    this.setState({
-      liked: !this.state.retweeted,
-    });
+    if (!this.state.retweeted) {
+      axios.get(`/api/retweet/${this.props.tweet.id}`).then(res => {
+        if (res.data.error) {
+          console.log(res.data.error_details);
+        }
+      });
+    } else {
+      axios.get(`/api/unretweet/${this.props.tweet.id}`).then(res => {
+        if (res.data.error) {
+          console.log(res.data.error_details);
+        }
+      });
+    }
+    this.setState(state => ({
+      retweeted: !this.state.retweeted,
+    }));
   };
 
   render() {
