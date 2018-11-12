@@ -3,9 +3,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
-
 import {
   TwitterRetweet,
   Heart as HeartIcon,
@@ -13,8 +11,6 @@ import {
   Link as LinkIcon,
 } from 'mdi-material-ui';
 import { green, red } from '@material-ui/core/colors';
-import { Hidden } from '@material-ui/core';
-import { Link } from 'react-router-dom';
 import ImageModal from './ImageModal';
 
 const styles = theme => {
@@ -63,6 +59,16 @@ const styles = theme => {
         display: 'flex',
       },
     },
+    likeButton: {
+      '&:hover svg': {
+        color: red[500],
+      },
+    },
+    retweetButton: {
+      '&:hover svg': {
+        color: green[700],
+      },
+    },
     actionButton: {
       minWidth: '48px',
       '& svg': {
@@ -78,6 +84,15 @@ const styles = theme => {
 class Image extends Component {
   state = {
     open: false,
+    liked: false,
+    retweeted: false,
+  };
+
+  componentDidMount = () => {
+    this.setState({
+      liked: this.props.tweet.favorited,
+      retweeted: this.props.tweet.retweeted,
+    });
   };
 
   handleOpen = () => {
@@ -89,8 +104,21 @@ class Image extends Component {
     this.setState({ open: false });
   };
 
+  handleLike = () => {
+    this.setState({
+      liked: !this.state.liked,
+    });
+  };
+
+  handleRetweet = () => {
+    this.setState({
+      retweeted: !this.state.retweeted,
+    });
+  };
+
   render() {
     const { classes, tweet, image } = this.props;
+    const { liked, retweeted } = this.state;
     const retweetStyle = { color: green[700], opacity: 1 };
     const likeStyle = { color: red[500], opacity: 1 };
     return (
@@ -110,14 +138,16 @@ class Image extends Component {
             <Button
               size="small"
               color="primary"
-              className={classes.actionButton}>
-              <TwitterRetweet style={tweet.retweeted ? retweetStyle : null} />
+              onClick={this.handleRetweet}
+              className={`${classes.actionButton} ${classes.retweetButton}`}>
+              <TwitterRetweet style={retweeted ? retweetStyle : null} />
             </Button>
             <Button
               size="small"
               color="primary"
-              className={classes.actionButton}>
-              {tweet.favorited ? (
+              onClick={this.handleLike}
+              className={`${classes.actionButton} ${classes.likeButton}`}>
+              {liked ? (
                 <HeartIcon style={{ ...likeStyle, width: '0.8em' }} />
               ) : (
                 <HeartOutlineIcon style={{ width: '0.8em' }} />
@@ -137,16 +167,6 @@ class Image extends Component {
         {this.state.open && (
           <ImageModal handleClose={this.handleClose} image={image} />
         )}
-        {/* <Modal
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          open={this.state.open}
-          onClose={this.handleClose}
-          className={classes.modal}>
-          <div className={classes.paper}>
-            <img src={image.url} alt="" />
-          </div>
-        </Modal> */}
       </div>
     );
   }
