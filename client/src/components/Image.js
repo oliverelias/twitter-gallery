@@ -112,7 +112,7 @@ class Image extends Component {
 
   handleRetweet = () => {
     this.setState({
-      retweeted: !this.state.retweeted,
+      liked: !this.state.retweeted,
     });
   };
 

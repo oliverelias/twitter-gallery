@@ -28,6 +28,7 @@ class Gallery extends Component {
     tweets: [],
     lastId: null,
     loadingMoreImages: false,
+    loadingNewPage: false,
   };
 
   async componentDidMount() {
@@ -46,7 +47,8 @@ class Gallery extends Component {
   async componentDidUpdate(prevProps, prevState, snapshot) {
     if (
       prevProps.location.pathname === this.props.location.pathname &&
-      !this.state.loadingMoreImages
+      !this.state.loadingMoreImages &&
+      !this.state.loadingNewPage
     ) {
       return;
     }
@@ -56,11 +58,13 @@ class Gallery extends Component {
 
     // If we're loading a new route remove previous images
     if (prevProps.location.pathname !== this.props.location.pathname) {
-      // await this so we dont fetch new tweets with old max_id
-      await this.setState({
+      this.setState(state => ({
         tweets: [],
         lastId: null,
-      });
+        loadingNewPage: true,
+        loadingMoreImages: false,
+      }));
+      return;
     }
 
     let apiUrl = this.createUrl();
@@ -68,12 +72,13 @@ class Gallery extends Component {
 
     const res = await axios.get(apiUrl);
 
-    this.setState({
+    this.setState(state => ({
       // append new tweets to old ones
-      tweets: this.state.tweets.concat(res.data.tweets.splice(1)),
+      tweets: state.tweets.concat(res.data.tweets.splice(1)),
       loadingMoreImages: false,
+      loadingNewPage: false,
       lastId: res.data.last_id,
-    });
+    }));
 
     NProgress.done();
   }
@@ -85,7 +90,7 @@ class Gallery extends Component {
     const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.offsetHeight;
     const scroll = document.documentElement.scrollTop;
-    if (windowHeight + scroll >= documentHeight) {
+    if (windowHeight + scroll >= documentHeight - windowHeight / 2) {
       if (!this.state.loadingMoreImages)
         this.setState({ loadingMoreImages: true });
     }
