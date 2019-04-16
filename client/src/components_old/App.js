@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppHeader from './components/AppHeader';
-import AppDrawer from './components/AppDrawer';
-import Gallery from './components/Gallery';
-import axios from 'axios';
+import React, { Component } from "react";
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import { withStyles } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import AppHeader from "./AppHeader";
+import AppDrawer from "./AppDrawer";
+import Gallery from "./Gallery";
+import axios from "axios";
 
 const styles = {
   root: {
-    display: 'flex',
+    display: "flex",
   },
 };
 
@@ -18,9 +18,9 @@ class App extends Component {
     mobileOpen: false,
 
     authenticated: false,
-    username: '',
-    displayName: '',
-    profileImageUrl: '',
+    username: "",
+    displayName: "",
+    profileImageUrl: "",
   };
 
   handleDrawerToggle = () => {
@@ -28,7 +28,7 @@ class App extends Component {
   };
 
   getAuthentication = () => {
-    axios.get('/api/current_user').then(user => {
+    axios.get("/api/current_user").then(user => {
       if (user.data) {
         return this.setState({
           authenticated: true,

@@ -1,20 +1,17 @@
-import React from "react";
-import Drawer from "@material-ui/core/Drawer";
-import { withStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
-import Hidden from "@material-ui/core/Hidden";
-import Divider from "@material-ui/core/Divider";
-import { mainItems, subItems } from "./AppDrawerContents";
-import { compose } from "redux";
-import { connect } from "react-redux";
-import { handleDrawerToggle } from "../actions";
+import React from 'react';
+import Drawer from '@material-ui/core/Drawer';
+import { withStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import Hidden from '@material-ui/core/Hidden';
+import Divider from '@material-ui/core/Divider';
+import { mainItems, subItems } from './AppDrawerContents';
 
 const styles = theme => ({
   drawerItems: {
-    marginTop: "64px",
+    marginTop: '64px',
   },
   drawerPaper: {
-    width: "240px",
+    width: '240px',
   },
 });
 
@@ -36,15 +33,14 @@ const AppDrawer = props => {
       <Hidden mdUp>
         <Drawer
           variant="temporary"
-          open={props.mobileDrawerOpen}
+          open={props.mobileOpen}
           onClose={props.handleDrawerToggle}
           classes={{
             paper: classes.drawerPaper,
           }}
           ModalProps={{
             keepMounted: true, // Better open performance on mobile.
-          }}
-        >
+          }}>
           {drawer}
         </Drawer>
       </Hidden>
@@ -53,8 +49,7 @@ const AppDrawer = props => {
           variant="permanent"
           classes={{
             paper: classes.drawerPaper,
-          }}
-        >
+          }}>
           {drawer}
         </Drawer>
       </Hidden>
@@ -62,14 +57,4 @@ const AppDrawer = props => {
   );
 };
 
-const mapStateToProps = state => {
-  return { mobileDrawerOpen: state.interface.mobileDrawerOpen };
-};
-
-export default compose(
-  connect(
-    mapStateToProps,
-    { handleDrawerToggle }
-  ),
-  withStyles(styles)
-)(AppDrawer);
+export default withStyles(styles)(AppDrawer);
