@@ -9,8 +9,9 @@ import NProgress from "nprogress";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 
-import { newTweets } from "../actions";
+import { getUserTweets } from "../actions";
 import Image from "./Image";
+import Loading from "./Loading";
 
 const styles = theme => ({
   galleryContainer: {
@@ -32,15 +33,42 @@ const styles = theme => ({
 });
 
 class Gallery extends Component {
+  state = {
+    loadingNewPage: false,
+    loadingNewTweets: false,
+  };
+
   componentDidMount() {
-    this.props.newTweets(this.props.match.params.user);
+    const { user } = this.props.match.params;
+    this.props.getUserTweets(user);
+    window.addEventListener("scroll", this.handleScroll);
   }
+
+  componentDidUpdate(prevProps) {
+    const { user } = this.props.match.params;
+    if (user !== prevProps.match.params.user) {
+      this.props.getUserTweets(user);
+    }
+  }
+
+  handleScroll = () => {
+    const SCROLL_LEEWAY = 10;
+    if (
+      window.scrollY + window.innerHeight >=
+        document.documentElement.offsetHeight - SCROLL_LEEWAY &&
+      !this.props.tweets.loading
+    ) {
+      const { user } = this.props.match.params;
+      this.props.getUserTweets(user, this.props.tweets.lastId);
+    }
+  };
+
   renderImages = () => {
-    const { classes } = this.props;
-    const { tweets } = this.props;
-    console.log(tweets);
-    return tweets.map(tweet => {
-      return tweet.images.map(image => <Image tweet={tweet} image={image} />);
+    const { data } = this.props.tweets;
+    return data.map(tweet => {
+      return tweet.images.map(image => (
+        <Image tweet={tweet} image={image} key={image.url} />
+      ));
     });
   };
 
@@ -49,6 +77,7 @@ class Gallery extends Component {
     return (
       <div className={classes.galleryContainer}>
         <ul className={classes.gallery}>{this.renderImages()}</ul>
+        <Loading active={this.props.tweets.loading} />
       </div>
     );
   }
@@ -62,7 +91,7 @@ export default compose(
   withRouter,
   connect(
     mapStateToProps,
-    { newTweets }
+    { getUserTweets }
   ),
   withStyles(styles)
 )(Gallery);

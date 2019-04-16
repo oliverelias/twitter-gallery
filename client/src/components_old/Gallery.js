@@ -1,23 +1,23 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import Image from './Image';
-import Loading from './Loading';
-import NProgress from 'nprogress';
-import axios from 'axios';
+import React, { Component } from "react";
+import { withStyles } from "@material-ui/core/styles";
+import Image from "./Image";
+import Loading from "./Loading";
+import NProgress from "nprogress";
+import axios from "axios";
 
 const styles = theme => ({
   galleryContainer: {
-    marginTop: '86px',
-    [theme.breakpoints.up('md')]: {
-      marginLeft: '240px',
+    marginTop: "86px",
+    [theme.breakpoints.up("md")]: {
+      marginLeft: "240px",
     },
   },
   gallery: {
     padding: `0 ${theme.spacing.unit}px`,
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    [theme.breakpoints.up('md')]: {
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    [theme.breakpoints.up("md")]: {
       padding: `0 ${theme.spacing.unit * 5}px`,
     },
   },
@@ -32,7 +32,7 @@ class Gallery extends Component {
   };
 
   async componentDidMount() {
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener("scroll", this.handleScroll);
 
     // Get set of tweets based on current route
     const apiPath = this.createUrl();
@@ -103,12 +103,12 @@ class Gallery extends Component {
   createUrl = () => {
     const { params } = this.props.match;
 
-    if (!params.user) return '/api/home';
+    if (!params.user) return "/api/home";
 
     const path =
-      params.likes && params.likes.toLowerCase() === 'likes'
-        ? 'user_favorites'
-        : 'user_timeline';
+      params.likes && params.likes.toLowerCase() === "likes"
+        ? "user_favorites"
+        : "user_timeline";
     return `/api/${path}/${params.user}`;
   };
 

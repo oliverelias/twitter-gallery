@@ -21,12 +21,13 @@ const styles = theme => {
       right: 0,
       padding: "12px",
       backgroundColor: "rgba(255,255,255,0.7)",
-      transform: "translateY(100%)",
+      // transform: "translateY(100%)",
       transitionDuration: "0.1s",
       display: "flex",
       alignItems: "center",
       justifyContent: "flex-end",
       cursor: "default",
+      opacity: 0,
     },
     imageContainer: {
       overflow: "hidden",
@@ -37,11 +38,17 @@ const styles = theme => {
       flexGrow: 1,
       flexBasis: "100px",
       position: "relative",
+      transitionDuration: "0.1s",
+      boxShadow:
+        "0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12)",
       "&:hover": {
         cursor: "pointer",
+        transform: "scale(1.01)",
+        boxShadow:
+          "0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)",
       },
-      "&:hover > *": {
-        transform: "translateY(0)",
+      "&:hover  *": {
+        opacity: "1",
       },
       "& > img": {
         width: "100%",

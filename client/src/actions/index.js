@@ -7,11 +7,18 @@ export const LOGIN_FAILURE = "LOGIN_FAILURE";
 /**
  * Get new tweets from the
  * @param { string } query   username to fetch tweets from
- * @param { bool }   new     whether to get new tweets or append
+ * @param { bool }   lastId  whether to get new tweets or append
  */
-export const getUserTweets = query => async dispatch => {
-  const response = await axios.get(`/api/user_timeline/${query}`);
-  dispatch({ type: "NEW_TWEETS", payload: response.data.tweets });
+export const getUserTweets = (query, lastId) => async dispatch => {
+  if (lastId) dispatch({ type: "FETCHING_TWEETS" });
+  const response = await axios.get(
+    `/api/user_timeline/${query}${lastId ? `?max_id=${lastId}` : ""}`
+  );
+  dispatch({
+    type: lastId ? "MORE_TWEETS" : "NEW_TWEETS",
+    // omit first tweet because same as last in previous request
+    payload: lastId ? response.data.tweets.slice(1) : response.data.tweets,
+  });
 };
 
 export const getAuthentication = () => async dispatch => {
