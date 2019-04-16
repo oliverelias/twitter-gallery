@@ -1,8 +1,8 @@
-const passport = require('passport');
-const twit = require('twit');
-const fs = require('fs');
-const config = require('../config/config.js');
-const sizeOf = require('image-size');
+const passport = require("passport");
+const twit = require("twit");
+const fs = require("fs");
+const config = require("../config/config.js");
+const sizeOf = require("image-size");
 
 const createTwit = (user, appOnly) => {
   if (appOnly) {
@@ -36,7 +36,7 @@ const simplifyTweet = tweet => {
         return {
           url: image.media_url_https,
           url_small: `${image.media_url_https}:small`,
-          aspect: image.sizes.large.w > image.sizes.large.h ? 'wide' : 'tall',
+          aspect: image.sizes.large.w > image.sizes.large.h ? "wide" : "tall",
         };
       }),
     ],
@@ -45,7 +45,6 @@ const simplifyTweet = tweet => {
 
 const getTwitterEndpoint = async (user, url, options) => {
   const appOnly = !user ? true : false;
-  console.log(`App only?: ${appOnly}`);
   const t = createTwit(user, appOnly);
   const tweets = await t.get(url, { count: 100, ...options });
   return {
@@ -62,7 +61,7 @@ module.exports = app => {
    * Returns basic information on logged in user
    * or null if none
    */
-  app.get('/api/current_user', (req, res) => {
+  app.get("/api/current_user", (req, res) => {
     if (req.user) {
       userObj = {
         username: req.user.username,
@@ -78,11 +77,11 @@ module.exports = app => {
   /**
    * Returns
    */
-  app.get('/api/home', async (req, res) => {
+  app.get("/api/home", async (req, res) => {
     if (req.user) {
       const data = await getTwitterEndpoint(
         req.user,
-        'statuses/home_timeline',
+        "statuses/home_timeline",
         {
           count: 200,
           ...req.query,
@@ -92,33 +91,33 @@ module.exports = app => {
     }
   });
 
-  app.get('/api/user_timeline/:user', async (req, res) => {
-    const data = await getTwitterEndpoint(req.user, 'statuses/user_timeline', {
+  app.get("/api/user_timeline/:user", async (req, res) => {
+    const data = await getTwitterEndpoint(req.user, "statuses/user_timeline", {
       screen_name: req.params.user,
       ...req.query,
     });
     res.send(data);
   });
 
-  app.get('/api/user_favorites/:user', async (req, res) => {
-    const data = await getTwitterEndpoint(req.user, 'favorites/list', {
+  app.get("/api/user_favorites/:user", async (req, res) => {
+    const data = await getTwitterEndpoint(req.user, "favorites/list", {
       screen_name: req.params.user,
       ...req.query,
     });
     res.send(data);
   });
 
-  app.get('/api/search/:query', async (req, res) => {
-    const data = getTwitterEndpoint(req.user, 'search/tweets', {
+  app.get("/api/search/:query", async (req, res) => {
+    const data = getTwitterEndpoint(req.user, "search/tweets", {
       q: req.params.query,
     });
     res.send(data);
   });
 
-  app.get('/api/retweet/:id', async (req, res) => {
+  app.get("/api/retweet/:id", async (req, res) => {
     try {
       const t = createTwit(req.user);
-      const data = await t.post('statuses/retweet/:id', {
+      const data = await t.post("statuses/retweet/:id", {
         id: req.params.id,
         trim_user: true,
       });
@@ -128,10 +127,10 @@ module.exports = app => {
     }
   });
 
-  app.get('/api/unretweet/:id', async (req, res) => {
+  app.get("/api/unretweet/:id", async (req, res) => {
     try {
       const t = createTwit(req.user);
-      const data = await t.post('statuses/unretweet/:id', {
+      const data = await t.post("statuses/unretweet/:id", {
         id: req.params.id,
         include_entities: false,
       });
@@ -141,10 +140,10 @@ module.exports = app => {
     }
   });
 
-  app.get('/api/favorite/:id', async (req, res) => {
+  app.get("/api/favorite/:id", async (req, res) => {
     try {
       const t = createTwit(req.user);
-      const data = await t.post('favorites/create', {
+      const data = await t.post("favorites/create", {
         id: req.params.id,
         include_entities: false,
       });
@@ -154,10 +153,10 @@ module.exports = app => {
     }
   });
 
-  app.get('/api/unfavorite/:id', async (req, res) => {
+  app.get("/api/unfavorite/:id", async (req, res) => {
     try {
       const t = createTwit(req.user);
-      const data = await t.post('favorites/destroy', {
+      const data = await t.post("favorites/destroy", {
         id: req.params.id,
         include_entities: false,
       });
@@ -167,17 +166,17 @@ module.exports = app => {
     }
   });
 
-  app.get('/api/dummy_images', async (req, res) => {
+  app.get("/api/dummy_images", async (req, res) => {
     const fileList = await fs
-      .readdirSync('./client/public/dummy_images/small')
+      .readdirSync("./client/public/dummy_images/small")
       .map(file => {
-        let dimensions = sizeOf('./client/public/dummy_images/small/' + file);
-        let aspect = dimensions.width > dimensions.height ? 'wide' : 'tall';
+        let dimensions = sizeOf("./client/public/dummy_images/small/" + file);
+        let aspect = dimensions.width > dimensions.height ? "wide" : "tall";
         return {
           extended_entities: {
             media: [
               {
-                media_url: '/dummy_images/small/' + file,
+                media_url: "/dummy_images/small/" + file,
                 sizes: {
                   large: {
                     w: dimensions.width,

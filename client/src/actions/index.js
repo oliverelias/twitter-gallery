@@ -4,9 +4,13 @@ export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAILURE = "LOGIN_FAILURE";
 
-export const newTweets = query => async dispatch => {
+/**
+ * Get new tweets from the
+ * @param { string } query   username to fetch tweets from
+ * @param { bool }   new     whether to get new tweets or append
+ */
+export const getUserTweets = query => async dispatch => {
   const response = await axios.get(`/api/user_timeline/${query}`);
-  console.log(response);
   dispatch({ type: "NEW_TWEETS", payload: response.data.tweets });
 };
 
