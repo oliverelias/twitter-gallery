@@ -20,7 +20,7 @@ const styles = theme => {
       left: 0,
       right: 0,
       padding: "12px",
-      backgroundColor: "rgba(255,255,255,0.7)",
+      backgroundColor: "rgba(255,255,255,0.8)",
       // transform: "translateY(100%)",
       transitionDuration: "0.1s",
       display: "flex",
@@ -47,7 +47,7 @@ const styles = theme => {
         boxShadow:
           "0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)",
       },
-      "&:hover  *": {
+      "&:hover > *": {
         opacity: "1",
       },
       "& > img": {
@@ -59,13 +59,18 @@ const styles = theme => {
     },
     image: {},
     actionButton: {
-      // color: "white",
+      "& svg": {
+        opacity: 0.8,
+      },
     },
   };
 };
 
 const Image = props => {
   const { classes } = props;
+  const { favorited, retweeted } = props.tweet;
+  const retweetStyle = { color: green[700], opacity: 1 };
+  const likeStyle = { color: red[500], opacity: 1 };
   return (
     <div
       className={classes.imageContainer}
@@ -73,6 +78,24 @@ const Image = props => {
     >
       <img className={classes.image} src={props.image.url} alt="" />
       <div className={classes.actionBar}>
+        <Button
+          size="small"
+          color="primary"
+          className={`${classes.actionButton} ${classes.retweetButton}`}
+        >
+          <TwitterRetweet style={retweeted ? retweetStyle : null} />
+        </Button>
+        <Button
+          size="small"
+          color="primary"
+          className={`${classes.actionButton} ${classes.likeButton}`}
+        >
+          {favorited ? (
+            <HeartIcon style={{ ...likeStyle, width: "0.8em" }} />
+          ) : (
+            <HeartOutlineIcon style={{ width: "0.8em" }} />
+          )}
+        </Button>
         <Button
           href={`https://twitter.com/statuses/${props.tweet.id}`}
           target="_blank"
