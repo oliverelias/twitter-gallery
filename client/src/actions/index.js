@@ -1,24 +1,23 @@
 import axios from "axios";
 
-export const LOGIN_REQUEST = "LOGIN_REQUEST";
-export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
-export const LOGIN_FAILURE = "LOGIN_FAILURE";
+const _getTweets = (query, flush) => async (dispatch, getState) => {
+  const response = await axios.get(query);
 
-/**
- * Get new tweets from the
- * @param { string } query   username to fetch tweets from
- * @param { bool }   lastId  whether to get new tweets or append
- */
-export const getUserTweets = (query, lastId) => async dispatch => {
-  if (lastId) dispatch({ type: "FETCHING_TWEETS" });
-  const response = await axios.get(
-    `/api/user_timeline/${query}${lastId ? `?max_id=${lastId}` : ""}`
-  );
   dispatch({
-    type: lastId ? "MORE_TWEETS" : "NEW_TWEETS",
+    type: flush ? "NEW_TWEETS" : "MORE_TWEETS",
     // omit first tweet because same as last in previous request
-    payload: lastId ? response.data.tweets.slice(1) : response.data.tweets,
+    payload: flush ? response.data.tweets : response.data.tweets.slice(1),
   });
+};
+
+export const getNewTweets = query => dispatch => {
+  dispatch({ type: "LOADING_NEW_TWEETS" });
+  dispatch(_getTweets(query, true));
+};
+
+export const getMoreTweets = query => (dispatch, getState) => {
+  dispatch({ type: "LOADING_MORE_TWEETS" });
+  dispatch(_getTweets(`${query}?max_id=${getState().tweets.lastId}`), false);
 };
 
 export const getAuthentication = () => async dispatch => {

@@ -1,18 +1,30 @@
-export default (state = { loading: false, lastId: null, data: [] }, action) => {
+export default (
+  state = {
+    loadingMoreTweets: false,
+    loadingNewPage: false,
+    lastId: null,
+    data: [],
+  },
+  action
+) => {
   switch (action.type) {
     case "NEW_TWEETS":
       return {
-        loading: false,
+        loadingMoreTweets: false,
+        loadingNewPage: false,
         lastId: action.payload[action.payload.length - 1].id,
         data: action.payload,
       };
 
-    case "FETCHING_TWEETS":
-      return { ...state, loading: true };
+    case "LOADING_MORE_TWEETS":
+      return { ...state, loadingMoreTweets: true };
+
+    case "LOADING_NEW_TWEETS":
+      return { ...state, data: [], loadingNewPage: true };
 
     case "MORE_TWEETS":
       return {
-        loading: false,
+        loadingMoreTweets: false,
         lastId: action.payload[action.payload.length - 1].id,
         data: [...state.data, ...action.payload],
       };

@@ -5,11 +5,11 @@ import { compose } from "redux";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import Fade from "@material-ui/core/Fade";
-import NProgress from "nprogress";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
+import Progress from "./NProgress/Progress";
 
-import { getUserTweets } from "../actions";
+import { getMoreTweets, getNewTweets } from "../actions";
 import Image from "./Image";
 import Loading from "./Loading";
 
@@ -30,6 +30,12 @@ const styles = theme => ({
       padding: `0 ${theme.spacing.unit * 5}px`,
     },
   },
+  progressBar: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    zIndex: 9999,
+  },
 });
 
 class Gallery extends Component {
@@ -39,27 +45,41 @@ class Gallery extends Component {
   };
 
   componentDidMount() {
-    const { user } = this.props.match.params;
-    this.props.getUserTweets(user);
+    const apiUrl = this.constructUrl();
+    this.props.getNewTweets(apiUrl);
     window.addEventListener("scroll", this.handleScroll);
   }
 
   componentDidUpdate(prevProps) {
-    const { user } = this.props.match.params;
-    if (user !== prevProps.match.params.user) {
-      this.props.getUserTweets(user);
+    console.log(this.props.tweets.loading);
+    const { user, action } = this.props.match.params || null;
+    if (
+      user !== prevProps.match.params.user ||
+      action !== prevProps.match.params.action
+    ) {
+      this.setState({ loadingNewPage: true });
+      this.props.getNewTweets(this.constructUrl());
     }
   }
+
+  constructUrl = () => {
+    const { user, action } = this.props.match.params;
+    const base = "/api";
+
+    if (!user) return `${base}/home`;
+    if (action === "likes") return `${base}/user_favorites/${user}`;
+    return `${base}/user_timeline/${user}`;
+  };
 
   handleScroll = () => {
     const SCROLL_LEEWAY = 10;
     if (
       window.scrollY + window.innerHeight >=
         document.documentElement.offsetHeight - SCROLL_LEEWAY &&
-      !this.props.tweets.loading
+      !this.props.tweets.loadingMoreTweets
     ) {
-      const { user } = this.props.match.params;
-      this.props.getUserTweets(user, this.props.tweets.lastId);
+      const apiUrl = this.constructUrl();
+      this.props.getMoreTweets(apiUrl);
     }
   };
 
@@ -76,8 +96,17 @@ class Gallery extends Component {
     const { classes } = this.props;
     return (
       <div className={classes.galleryContainer}>
+        <Progress
+          animationDuration={1000}
+          isAnimating={this.props.tweets.loadingNewPage}
+        />
         <ul className={classes.gallery}>{this.renderImages()}</ul>
-        <Loading active={this.props.tweets.loading} />
+        <Loading
+          active={
+            this.props.tweets.loadingMoreTweets &&
+            !this.props.tweets.loadingNewPage
+          }
+        />
       </div>
     );
   }
@@ -91,7 +120,7 @@ export default compose(
   withRouter,
   connect(
     mapStateToProps,
-    { getUserTweets }
+    { getMoreTweets, getNewTweets }
   ),
   withStyles(styles)
 )(Gallery);

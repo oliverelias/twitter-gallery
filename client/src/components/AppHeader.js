@@ -63,7 +63,6 @@ class AppHeader extends Component {
           >
             Twitter Gallery
           </Typography>
-          {/* TODO: Search Component */}
           <Search />
           <Button
             href={auth.authenticated ? "/auth/logout" : "/auth/authenticate"}

@@ -22,7 +22,7 @@ const App = props => {
         <div className={classes.root}>
           <AppHeader />
           <AppDrawer />
-          <Route path="/:user">
+          <Route path="/:user?/:action?">
             <Gallery />
           </Route>
         </div>
