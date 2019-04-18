@@ -30,13 +30,40 @@ export const getAuthentication = () => async dispatch => {
   });
 };
 
-export const handleLike = (id, tweet) => async dispatch => {
-  const url = tweet.liked ? `/api/unfavorite/${id}` : `/api/favorite/${id}`;
-  const response = await axios.get(url);
+export const handleLike = tweet => async dispatch => {
+  const url = tweet.favorited
+    ? `/api/unfavorite/${tweet.id}`
+    : `/api/favorite/${tweet.id}`;
   dispatch({
-    type: tweet.liked ? "LIKE_TWEET" : "UNLIKE_TWEET",
-    payload: { id, liked: tweet.liked, status: response.status },
+    type: tweet.favorited ? "UNLIKE_TWEET" : "LIKE_TWEET",
+    payload: { id: tweet.id },
   });
+  const response = await axios.get(url);
+  if (response.status !== 200) {
+    dispatch({
+      type: "LIKE_FAILED",
+      id: tweet.id,
+      message: `unable to ${tweet.favorited ? "unlike" : "like"} tweet.`,
+    });
+  }
+};
+
+export const handleRetweet = tweet => async dispatch => {
+  const url = tweet.retweeted
+    ? `/api/unretweet/${tweet.id}`
+    : `/api/retweet/${tweet.id}`;
+  dispatch({
+    type: tweet.retweeted ? "UNRETWEET_TWEET" : "RETWEET_TWEET",
+    payload: { id: tweet.id },
+  });
+  const response = await axios.get(url);
+  if (response.status !== 200) {
+    dispatch({
+      type: "RETWEET_FAILED",
+      id: tweet.id,
+      message: `unable to ${tweet.retweeted ? "unretweet" : "retweet"} tweet.`,
+    });
+  }
 };
 
 export const handleDrawerToggle = open => {

@@ -11,6 +11,8 @@ import {
 } from "mdi-material-ui";
 import { green, red } from "@material-ui/core/colors";
 
+import { handleLike, handleRetweet } from "../actions";
+
 const styles = theme => {
   return {
     actionBar: {
@@ -36,7 +38,7 @@ const styles = theme => {
       minWidth: "200px",
       height: "300px",
       flexGrow: 1,
-      flexBasis: "100px",
+      flexBasis: "200px",
       position: "relative",
       transitionDuration: "0.1s",
       boxShadow:
@@ -74,13 +76,14 @@ const Image = props => {
   return (
     <div
       className={classes.imageContainer}
-      style={{ minWidth: props.image.aspect === "wide" ? "350px" : "200px" }}
+      style={{ minWidth: props.image.aspect === "wide" ? "400px" : "200px" }}
     >
       <img className={classes.image} src={props.image.url} alt="" />
       <div className={classes.actionBar}>
         <Button
           size="small"
           color="primary"
+          onClick={() => props.handleRetweet(props.tweet)}
           className={`${classes.actionButton} ${classes.retweetButton}`}
         >
           <TwitterRetweet style={retweeted ? retweetStyle : null} />
@@ -88,6 +91,7 @@ const Image = props => {
         <Button
           size="small"
           color="primary"
+          onClick={() => props.handleLike(props.tweet)}
           className={`${classes.actionButton} ${classes.likeButton}`}
         >
           {favorited ? (
@@ -112,6 +116,9 @@ const Image = props => {
 };
 
 export default compose(
-  connect(null),
+  connect(
+    null,
+    { handleLike, handleRetweet }
+  ),
   withStyles(styles)
 )(Image);

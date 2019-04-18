@@ -51,7 +51,6 @@ class Gallery extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log(this.props.tweets.loading);
     const { user, action } = this.props.match.params || null;
     if (
       user !== prevProps.match.params.user ||
