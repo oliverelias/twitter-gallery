@@ -48,7 +48,7 @@ const styles = theme => {
         boxShadow:
           "0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)",
       },
-      [theme.breakpoints.down("xs")]: {
+      [theme.breakpoints.down("sm")]: {
         height: "150px",
       },
       "&:hover > *": {
@@ -68,21 +68,24 @@ const styles = theme => {
       },
     },
     portrait: {
-      [theme.breakpoints.up("sm")]: {
-        flexBasis: "200px",
-      },
-      [theme.breakpoints.down("xs")]: {
+      [theme.breakpoints.up("xs")]: {
         flexBasis: "100px",
+      },
+      [theme.breakpoints.up("md")]: {
+        flexBasis: "200px",
       },
     },
     landscape: {
       [theme.breakpoints.up("xs")]: {
         flexBasis: "200px",
       },
-      [theme.breakpoints.up("sm")]: {
+      [theme.breakpoints.up("md")]: {
         flexBasis: "300px",
       },
       [theme.breakpoints.up("lg")]: {
+        flexBasis: "350px",
+      },
+      [theme.breakpoints.up("xl")]: {
         flexBasis: "400px",
       },
     },
