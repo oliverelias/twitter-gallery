@@ -35,7 +35,6 @@ const styles = theme => {
       overflow: "hidden",
       borderRadius: "4px",
       margin: "5px",
-      minWidth: "200px",
       height: "300px",
       flexGrow: 1,
       flexBasis: "200px",
@@ -45,9 +44,12 @@ const styles = theme => {
         "0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12)",
       "&:hover": {
         cursor: "pointer",
-        transform: "scale(1.01)",
+        transform: "scale(1.005)",
         boxShadow:
           "0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)",
+      },
+      [theme.breakpoints.down("xs")]: {
+        height: "150px",
       },
       "&:hover > *": {
         opacity: "1",
@@ -65,6 +67,25 @@ const styles = theme => {
         opacity: 0.8,
       },
     },
+    portrait: {
+      [theme.breakpoints.up("sm")]: {
+        flexBasis: "200px",
+      },
+      [theme.breakpoints.down("xs")]: {
+        flexBasis: "100px",
+      },
+    },
+    landscape: {
+      [theme.breakpoints.up("xs")]: {
+        flexBasis: "200px",
+      },
+      [theme.breakpoints.up("sm")]: {
+        flexBasis: "300px",
+      },
+      [theme.breakpoints.up("lg")]: {
+        flexBasis: "400px",
+      },
+    },
   };
 };
 
@@ -75,8 +96,9 @@ const Image = props => {
   const likeStyle = { color: red[500], opacity: 1 };
   return (
     <div
-      className={classes.imageContainer}
-      style={{ minWidth: props.image.aspect === "wide" ? "400px" : "200px" }}
+      className={`${classes.imageContainer} ${
+        props.image.aspect === "wide" ? classes.landscape : classes.portrait
+      }`}
     >
       <img className={classes.image} src={props.image.url} alt="" />
       <div className={classes.actionBar}>
