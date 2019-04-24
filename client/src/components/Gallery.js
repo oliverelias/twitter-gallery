@@ -1,137 +1,125 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import Image from './Image';
-import Loading from './Loading';
-import NProgress from 'nprogress';
-import axios from 'axios';
+import React, { Component } from "react";
+import { withStyles } from "@material-ui/core/styles";
+import { connect } from "react-redux";
+import { compose } from "redux";
+import GridList from "@material-ui/core/GridList";
+import GridListTile from "@material-ui/core/GridListTile";
+import Fade from "@material-ui/core/Fade";
+import axios from "axios";
+import { withRouter } from "react-router-dom";
+import Progress from "./NProgress/Progress";
+
+import { getMoreTweets, getNewTweets } from "../actions";
+import Image from "./Image";
+import Loading from "./Loading";
 
 const styles = theme => ({
   galleryContainer: {
-    marginTop: '86px',
-    [theme.breakpoints.up('md')]: {
-      marginLeft: '240px',
+    marginTop: "86px",
+    [theme.breakpoints.up("md")]: {
+      marginLeft: "240px",
     },
   },
   gallery: {
     padding: `0 ${theme.spacing.unit}px`,
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    [theme.breakpoints.up('md')]: {
+    display: "flex",
+    flexWrap: "wrap",
+    listStyle: "none",
+    justifyContent: "space-between",
+    [theme.breakpoints.up("md")]: {
       padding: `0 ${theme.spacing.unit * 5}px`,
     },
+  },
+  progressBar: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    zIndex: 9999,
   },
 });
 
 class Gallery extends Component {
   state = {
-    tweets: [],
-    lastId: null,
-    loadingMoreImages: false,
     loadingNewPage: false,
+    loadingNewTweets: false,
   };
 
-  async componentDidMount() {
-    window.addEventListener('scroll', this.handleScroll);
-
-    // Get set of tweets based on current route
-    const apiPath = this.createUrl();
-    const res = await axios.get(apiPath);
-
-    this.setState({
-      tweets: res.data.tweets,
-      lastId: res.data.last_id,
-    });
+  componentDidMount() {
+    const apiUrl = this.constructUrl();
+    this.props.getNewTweets(apiUrl);
+    window.addEventListener("scroll", this.handleScroll);
   }
 
-  async componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate(prevProps) {
+    const { user, action } = this.props.match.params || null;
     if (
-      prevProps.location.pathname === this.props.location.pathname &&
-      !this.state.loadingMoreImages &&
-      !this.state.loadingNewPage
+      user !== prevProps.match.params.user ||
+      action !== prevProps.match.params.action
     ) {
-      return;
+      this.setState({ loadingNewPage: true });
+      this.props.getNewTweets(this.constructUrl());
     }
-
-    // Dont show progress bar if just loading new images
-    if (!this.state.loadingMoreImages) NProgress.start();
-
-    // If we're loading a new route remove previous images
-    if (prevProps.location.pathname !== this.props.location.pathname) {
-      this.setState(state => ({
-        tweets: [],
-        lastId: null,
-        loadingNewPage: true,
-        loadingMoreImages: false,
-      }));
-      return;
-    }
-
-    let apiUrl = this.createUrl();
-    if (this.state.lastId) apiUrl += `?max_id=${this.state.lastId}`;
-
-    const res = await axios.get(apiUrl);
-
-    this.setState(state => ({
-      // append new tweets to old ones
-      tweets: state.tweets.concat(res.data.tweets.splice(1)),
-      loadingMoreImages: false,
-      loadingNewPage: false,
-      lastId: res.data.last_id,
-    }));
-
-    NProgress.done();
   }
 
-  /**
-   * Set state to load more images when scrolled to bottom of page
-   */
-  handleScroll = e => {
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.offsetHeight;
-    const scroll = document.documentElement.scrollTop;
-    if (windowHeight + scroll >= documentHeight - windowHeight / 2) {
-      if (!this.state.loadingMoreImages)
-        this.setState({ loadingMoreImages: true });
-    }
+  constructUrl = () => {
+    const { user, action } = this.props.match.params;
+    const base = "/api";
+
+    if (!user) return `${base}/home`;
+    if (action === "likes") return `${base}/user_favorites/${user}`;
+    return `${base}/user_timeline/${user}`;
   };
 
-  /**
-   * Create an URL based on current route
-   * if no route will default to the home timeline
-   */
-  createUrl = () => {
-    const { params } = this.props.match;
-
-    if (!params.user) return '/api/home';
-
-    const path =
-      params.likes && params.likes.toLowerCase() === 'likes'
-        ? 'user_favorites'
-        : 'user_timeline';
-    return `/api/${path}/${params.user}`;
+  handleScroll = () => {
+    const SCROLL_LEEWAY = 10;
+    if (
+      window.scrollY + window.innerHeight >=
+        document.documentElement.offsetHeight - SCROLL_LEEWAY &&
+      !this.props.tweets.loadingMoreTweets
+    ) {
+      const apiUrl = this.constructUrl();
+      this.props.getMoreTweets(apiUrl);
+    }
   };
 
   renderImages = () => {
-    const { tweets } = this.state;
-
-    return tweets.map(tweet => {
+    const { data } = this.props.tweets;
+    return data.map(tweet => {
       return tweet.images.map(image => (
-        <Image key={image.url} tweet={tweet} image={image} />
+        <Image tweet={tweet} image={image} key={image.url} />
       ));
     });
   };
 
   render() {
     const { classes } = this.props;
-    const { loadingMoreImages } = this.state;
     return (
       <div className={classes.galleryContainer}>
-        <div className={classes.gallery}>{this.renderImages()}</div>
-        <Loading active={loadingMoreImages} />
+        <Progress
+          animationDuration={1000}
+          isAnimating={this.props.tweets.loadingNewPage}
+        />
+        <ul className={classes.gallery}>{this.renderImages()}</ul>
+        <Loading
+          active={
+            this.props.tweets.loadingMoreTweets &&
+            !this.props.tweets.loadingNewPage
+          }
+        />
       </div>
     );
   }
 }
 
-export default withStyles(styles)(Gallery);
+const mapStateToProps = state => {
+  return { tweets: state.tweets };
+};
+
+export default compose(
+  withRouter,
+  connect(
+    mapStateToProps,
+    { getMoreTweets, getNewTweets }
+  ),
+  withStyles(styles)
+)(Gallery);

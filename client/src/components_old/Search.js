@@ -1,51 +1,51 @@
-import React, { Component } from "react";
-import { withStyles } from "@material-ui/core";
-import Input from "@material-ui/core/Input";
-import SearchIcon from "@material-ui/icons/Search";
-import { fade } from "@material-ui/core/styles/colorManipulator";
-import { Redirect } from "react-router-dom";
-import { withRouter } from "react-router-dom";
-import { compose } from "redux";
+import React, { Component } from 'react';
+import { withStyles } from '@material-ui/core';
+import Input from '@material-ui/core/Input';
+import SearchIcon from '@material-ui/icons/Search';
+import { fade } from '@material-ui/core/styles/colorManipulator';
+import { Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import propTypes from 'prop-types';
 
 const styles = theme => ({
   search: {
-    position: "relative",
+    position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
-    "&:hover": {
+    '&:hover': {
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
     // marginLeft: 0,
     // width: '100%',
     // [theme.breakpoints.up('sm')]: {
     marginLeft: theme.spacing.unit,
-    width: "auto",
-    height: "100%",
+    width: 'auto',
+    height: '100%',
     // },
   },
   searchIcon: {
     width: theme.spacing.unit * 9,
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   inputRoot: {
-    color: "inherit",
-    width: "100%",
+    color: 'inherit',
+    width: '100%',
   },
   inputInput: {
     paddingTop: theme.spacing.unit,
     paddingRight: theme.spacing.unit,
     paddingBottom: theme.spacing.unit,
     paddingLeft: theme.spacing.unit * 10,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
       width: 120,
-      "&:focus": {
+      '&:focus': {
         width: 200,
       },
     },
@@ -54,7 +54,7 @@ const styles = theme => ({
 
 class Search extends Component {
   state = {
-    search: "",
+    search: '',
     submit: false,
   };
 
@@ -75,8 +75,7 @@ class Search extends Component {
           onSubmit={e => {
             e.preventDefault();
             this.props.history.push(`/${this.state.search}`);
-          }}
-        >
+          }}>
           <Input
             placeholder="Search…"
             disableUnderline
@@ -94,7 +93,10 @@ class Search extends Component {
   }
 }
 
-export default compose(
-  withRouter,
-  withStyles(styles)
-)(Search);
+Search.contextTypes = {
+  history: propTypes.shape({
+    push: propTypes.func.isRequired,
+  }),
+};
+
+export default withStyles(styles)(Search);

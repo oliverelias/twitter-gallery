@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Route } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -8,9 +9,10 @@ import IconButton from "@material-ui/core/IconButton";
 import Avatar from "@material-ui/core/Avatar";
 import MenuIcon from "@material-ui/icons/Menu";
 import Search from "./Search";
+import axios from "axios";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { getAuthentication, handleDrawerToggle } from "../actions";
+import { newTweets } from "../actions";
 
 const styles = theme => ({
   appHeaderRoot: {
@@ -38,18 +40,19 @@ const styles = theme => ({
 });
 
 class AppHeader extends Component {
-  componentDidMount() {
-    this.props.getAuthentication();
+  componentDidMount() {}
+
+  renderButton() {
+    return <div />;
   }
+
   render() {
-    const { classes, auth } = this.props;
+    const { classes, authenticated, displayName, profileImageUrl } = this.props;
     return (
       <AppBar className={classes.appHeaderRoot}>
         <Toolbar>
           <IconButton
-            onClick={() =>
-              this.props.handleDrawerToggle(this.props.mobileDrawerOpen)
-            }
+            onClick={this.props.handleDrawerToggle}
             className={classes.menuButton}
             color="inherit"
             aria-label="Menu"
@@ -63,17 +66,17 @@ class AppHeader extends Component {
           >
             Twitter Gallery
           </Typography>
-          <Search />
+          <Route component={Search} />
           <Button
-            href={auth.authenticated ? "/auth/logout" : "/auth/authenticate"}
+            href={authenticated ? "/auth/logout" : "/auth/authenticate"}
             color="inherit"
           >
-            {auth.authenticated ? auth.displayName : "Log In To Twitter"}
+            {authenticated ? displayName : "Login with Twitter"}
           </Button>
-          {auth.authenticated ? (
+          {authenticated ? (
             <Avatar
-              alt={auth.displayName}
-              src={auth.profileImageUrl}
+              alt={displayName}
+              src={profileImageUrl}
               className={classes.profileImage}
             />
           ) : null}
@@ -84,16 +87,13 @@ class AppHeader extends Component {
 }
 
 const mapStateToProps = state => {
-  return {
-    auth: state.auth,
-    mobileDrawerOpen: state.interface.mobileDrawerOpen,
-  };
+  return { tweets: state.tweets };
 };
 
 export default compose(
   withStyles(styles),
   connect(
     mapStateToProps,
-    { getAuthentication, handleDrawerToggle }
+    { newTweets }
   )
 )(AppHeader);
