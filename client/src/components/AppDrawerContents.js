@@ -1,15 +1,17 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import StarIcon from '@material-ui/icons/Star';
-import HomeIcon from '@material-ui/icons/Home';
+import React from "react";
+import { Link } from "react-router-dom";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import StarIcon from "@material-ui/icons/Star";
+import HomeIcon from "@material-ui/icons/Home";
+import LockOpenIcon from "@material-ui/icons/Home";
 import {
   GithubCircle,
   AccountMultiple,
   AccountMultipleOutline,
-} from 'mdi-material-ui';
+  Login,
+} from "mdi-material-ui";
 
 export const mainItems = username => {
   return (
@@ -51,12 +53,22 @@ export const subItems = (
       button
       component="a"
       href="https://github.com/oliverelias/twitter-gallery"
-      to="/">
+    >
       <ListItemIcon>
         <GithubCircle />
       </ListItemIcon>
       <ListItemText primary="Github" />
     </ListItem>
-    {/* </a> */}
+  </div>
+);
+
+export const loginItems = (
+  <div>
+    <ListItem button component="a" href="/auth/authenticate">
+      <ListItemIcon>
+        <Login />
+      </ListItemIcon>
+      <ListItemText primary="Login" />
+    </ListItem>
   </div>
 );

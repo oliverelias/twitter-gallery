@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import { connect } from "react-redux";
+import { compose } from "redux";
+import { newTweets } from "../actions";
 
 import AppHeader from "./AppHeader";
 import AppDrawer from "./AppDrawer";
@@ -14,14 +17,14 @@ const styles = {
 };
 
 const App = props => {
-  const { classes } = props;
+  const { classes, user } = props;
   return (
     <React.Fragment>
       <CssBaseline />
       <Router>
         <div className={classes.root}>
           <AppHeader />
-          <AppDrawer />
+          <AppDrawer user={user} />
           <Route path="/:user?/:action?">
             <Gallery />
           </Route>
@@ -31,4 +34,11 @@ const App = props => {
   );
 };
 
-export default withStyles(styles)(App);
+const mapStateToProps = state => {
+  return { user: state.auth };
+};
+
+export default compose(
+  connect(mapStateToProps),
+  withStyles(styles)
+)(App);

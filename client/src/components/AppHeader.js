@@ -35,6 +35,9 @@ const styles = theme => ({
     height: "32px",
     width: "32px",
   },
+  nameButton: {
+    marginLeft: theme.spacing.unit * 2,
+  },
 });
 
 class AppHeader extends Component {
@@ -67,6 +70,7 @@ class AppHeader extends Component {
           <Button
             href={auth.authenticated ? "/auth/logout" : "/auth/authenticate"}
             color="inherit"
+            className={classes.nameButton}
           >
             {auth.authenticated ? auth.displayName : "Log In To Twitter"}
           </Button>

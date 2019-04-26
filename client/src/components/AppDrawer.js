@@ -4,7 +4,7 @@ import { withStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import Hidden from "@material-ui/core/Hidden";
 import Divider from "@material-ui/core/Divider";
-import { mainItems, subItems } from "./AppDrawerContents";
+import { mainItems, subItems, loginItems } from "./AppDrawerContents";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { handleDrawerToggle } from "../actions";
@@ -19,13 +19,20 @@ const styles = theme => ({
 });
 
 const AppDrawer = props => {
-  const { classes } = props;
+  const { classes, user } = props;
 
   const drawer = (
     <div className={classes.drawerItems}>
-      <div className={classes.toolbar} />
       <Divider />
-      <List>{mainItems(props.username)}</List>
+      <List>{mainItems(user.username)}</List>
+      <Divider />
+      <List>{subItems}</List>
+    </div>
+  );
+
+  const loginDrawer = (
+    <div className={classes.drawerItems}>
+      <List>{loginItems}</List>
       <Divider />
       <List>{subItems}</List>
     </div>
@@ -45,7 +52,7 @@ const AppDrawer = props => {
             keepMounted: true, // Better open performance on mobile.
           }}
         >
-          {drawer}
+          {user.authenticated ? drawer : loginDrawer}
         </Drawer>
       </Hidden>
       <Hidden smDown>
@@ -55,7 +62,7 @@ const AppDrawer = props => {
             paper: classes.drawerPaper,
           }}
         >
-          {drawer}
+          {user.authenticated ? drawer : loginDrawer}
         </Drawer>
       </Hidden>
     </div>
