@@ -40,13 +40,11 @@ const styles = theme => {
       flexBasis: "200px",
       position: "relative",
       transitionDuration: "0.1s",
-      boxShadow:
-        "0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12)",
+      boxShadow: theme.shadows[1],
       "&:hover": {
         cursor: "pointer",
-        transform: "scale(1.005)",
-        boxShadow:
-          "0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)",
+        transform: "scale(1.01)",
+        boxShadow: theme.shadows[8],
       },
       [theme.breakpoints.down("sm")]: {
         height: "150px",
