@@ -15,9 +15,13 @@ import Loading from "./Loading";
 
 const styles = theme => ({
   galleryContainer: {
-    marginTop: "86px",
+    marginTop: theme.spacing.unit * 6,
+    [theme.breakpoints.up("sm")]: {
+      marginTop: theme.spacing.unit * 8,
+    },
     [theme.breakpoints.up("md")]: {
       marginLeft: "240px",
+      marginTop: theme.spacing.unit * 10,
     },
   },
   gallery: {

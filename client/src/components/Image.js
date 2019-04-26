@@ -44,9 +44,12 @@ const styles = theme => {
       "&:hover": {
         cursor: "pointer",
         transform: "scale(1.01)",
-        boxShadow: theme.shadows[8],
+        boxShadow: theme.shadows[4],
       },
       [theme.breakpoints.down("sm")]: {
+        height: "200px",
+      },
+      [theme.breakpoints.down("xs")]: {
         height: "150px",
       },
       "&:hover > *": {
@@ -69,13 +72,19 @@ const styles = theme => {
       [theme.breakpoints.up("xs")]: {
         flexBasis: "100px",
       },
+      [theme.breakpoints.up("sm")]: {
+        flexBasis: "150px",
+      },
       [theme.breakpoints.up("md")]: {
         flexBasis: "200px",
       },
     },
     landscape: {
       [theme.breakpoints.up("xs")]: {
-        flexBasis: "200px",
+        flexBasis: "150px",
+      },
+      [theme.breakpoints.up("sm")]: {
+        flexBasis: "250px",
       },
       [theme.breakpoints.up("md")]: {
         flexBasis: "300px",

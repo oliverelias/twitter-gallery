@@ -16,6 +16,9 @@ const styles = theme => ({
   appHeaderRoot: {
     zIndex: theme.zIndex.drawer + 1,
   },
+  toolBar: {
+    justifyContent: "space-between",
+  },
   largeTitle: {
     flexGrow: 1,
     display: "none",
@@ -23,12 +26,17 @@ const styles = theme => ({
       display: "initial",
     },
   },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
+  menuButtonWrapper: {
+    [theme.breakpoints.up("sm")]: {
+      flexGrow: 1,
+    },
     [theme.breakpoints.up("md")]: {
       display: "none",
     },
+  },
+  menuButton: {
+    marginLeft: -12,
+    marginRight: 20,
   },
   profileImage: {
     marginLeft: "6px",
@@ -48,17 +56,19 @@ class AppHeader extends Component {
     const { classes, auth } = this.props;
     return (
       <AppBar className={classes.appHeaderRoot}>
-        <Toolbar>
-          <IconButton
-            onClick={() =>
-              this.props.handleDrawerToggle(this.props.mobileDrawerOpen)
-            }
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="Menu"
-          >
-            <MenuIcon />
-          </IconButton>
+        <Toolbar className={classes.toolBar}>
+          <div className={classes.menuButtonWrapper}>
+            <IconButton
+              onClick={() =>
+                this.props.handleDrawerToggle(this.props.mobileDrawerOpen)
+              }
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="Menu"
+            >
+              <MenuIcon />
+            </IconButton>
+          </div>
           <Typography
             variant="h6"
             color="inherit"
