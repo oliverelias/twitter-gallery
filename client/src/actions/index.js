@@ -66,6 +66,19 @@ export const handleRetweet = tweet => async dispatch => {
   }
 };
 
+export const openModal = tweet => {
+  return {
+    type: "OPEN_MODAL",
+    payload: tweet,
+  };
+};
+
+export const closeModal = tweet => {
+  return {
+    type: "CLOSE_MODAL",
+  };
+};
+
 export const handleDrawerToggle = open => {
   return {
     type: "DRAWER_TOGGLE",

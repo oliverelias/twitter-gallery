@@ -2,13 +2,15 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import Modal from "@material-ui/core/Modal";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { newTweets } from "../actions";
+import { closeModal } from "../actions";
 
 import AppHeader from "./AppHeader";
 import AppDrawer from "./AppDrawer";
 import Gallery from "./Gallery";
+import ImageModal from "./ImageModal";
 
 const styles = {
   root: {
@@ -28,6 +30,9 @@ const App = props => {
           <Route path="/:user?/:action?">
             <Gallery />
           </Route>
+          <Modal open={props.modalOpen} onClose={props.closeModal}>
+            <ImageModal />
+          </Modal>
         </div>
       </Router>
     </React.Fragment>
@@ -35,10 +40,13 @@ const App = props => {
 };
 
 const mapStateToProps = state => {
-  return { user: state.auth };
+  return { user: state.auth, modalOpen: state.interface.modalOpen };
 };
 
 export default compose(
-  connect(mapStateToProps),
+  connect(
+    mapStateToProps,
+    { closeModal }
+  ),
   withStyles(styles)
 )(App);

@@ -11,7 +11,7 @@ import {
 } from "mdi-material-ui";
 import { green, red } from "@material-ui/core/colors";
 
-import { handleLike, handleRetweet } from "../actions";
+import { handleLike, handleRetweet, openModal } from "../actions";
 
 const styles = theme => {
   return {
@@ -110,7 +110,12 @@ const Image = props => {
         props.image.aspect === "wide" ? classes.landscape : classes.portrait
       }`}
     >
-      <img className={classes.image} src={props.image.url} alt="" />
+      <img
+        className={classes.image}
+        src={props.image.url}
+        alt=""
+        onClick={() => props.openModal(props.tweet)}
+      />
       <div className={classes.actionBar}>
         <Button
           size="small"
@@ -150,7 +155,7 @@ const Image = props => {
 export default compose(
   connect(
     null,
-    { handleLike, handleRetweet }
+    { handleLike, handleRetweet, openModal }
   ),
   withStyles(styles)
 )(Image);
