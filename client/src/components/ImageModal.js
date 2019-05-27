@@ -2,33 +2,49 @@ import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { compose } from "redux";
+import CancelIcon from "@material-ui/icons/Cancel";
+import { Cancel } from "mdi-material-ui";
+import { closeModal } from "../actions";
 
 const styles = {
   modalContainer: {
+    position: "relative",
     height: "100%",
     maxWidth: "1024px",
     backgroundColor: "#14171a",
     margin: "0 auto",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "flex-end",
+    justifyContent: "flex-start",
     alignItems: "center",
-    padding: "24px",
+
+    "&:focus": {
+      outline: "none",
+    },
   },
   imageContainer: {
-    height: "100%",
+    padding: "48px 24px",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    height: "85%",
   },
   image: {
     maxHeight: "100%",
     maxWidth: "100%",
   },
   textContainer: {
-    height: "150px",
+    padding: "24px",
     display: "flex",
+    height: "15%",
     color: "#ccc",
+  },
+  cancel: {
+    fill: "white",
+    fontSize: "38px",
+    position: "absolute",
+    right: "8px",
+    top: "8px",
   },
 };
 
@@ -42,6 +58,7 @@ const ImageModal = props => {
       <div className={classes.textContainer}>
         <p className={classes.text}>{props.tweet.text}</p>
       </div>
+      <CancelIcon className={classes.cancel} onClick={props.closeModal} />
     </div>
   );
 };
@@ -51,6 +68,9 @@ const mapStateToProps = state => {
 };
 
 export default compose(
-  connect(mapStateToProps),
+  connect(
+    mapStateToProps,
+    { closeModal }
+  ),
   withStyles(styles)
 )(ImageModal);

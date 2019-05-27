@@ -112,7 +112,7 @@ const Image = props => {
     >
       <img
         className={classes.image}
-        src={props.image.url}
+        src={props.image.url_small}
         alt=""
         onClick={() => props.openModal(props.tweet)}
       />
