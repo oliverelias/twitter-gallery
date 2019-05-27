@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import { withRouter } from "react-router-dom";
 import {
   TwitterRetweet,
   Heart as HeartIcon,
@@ -159,7 +158,6 @@ const Image = props => {
 };
 
 export default compose(
-  withRouter,
   connect(
     null,
     { handleLike, handleRetweet, openModal }
