@@ -89,8 +89,8 @@ class Gallery extends Component {
   renderImages = () => {
     const { data } = this.props.tweets;
     return data.map(tweet => {
-      return tweet.images.map(image => (
-        <Image tweet={tweet} image={image} key={image.url} />
+      return tweet.images.map((image, index) => (
+        <Image tweet={tweet} offset={index} key={image.url} />
       ));
     });
   };

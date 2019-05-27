@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
+import { withRouter } from "react-router-dom";
 import {
   TwitterRetweet,
   Heart as HeartIcon,
@@ -52,8 +53,11 @@ const styles = theme => {
       [theme.breakpoints.down("xs")]: {
         height: "150px",
       },
-      "&:hover > *": {
+      "&:hover > div": {
         opacity: "1",
+        [theme.breakpoints.down("xs")]: {
+          opacity: 0,
+        },
       },
       "& > img": {
         width: "100%",
@@ -100,27 +104,29 @@ const styles = theme => {
 };
 
 const Image = props => {
-  const { classes } = props;
-  const { favorited, retweeted } = props.tweet;
+  const { classes, tweet, offset } = props;
+  const { favorited, retweeted } = tweet;
   const retweetStyle = { color: green[700], opacity: 1 };
   const likeStyle = { color: red[500], opacity: 1 };
   return (
     <div
       className={`${classes.imageContainer} ${
-        props.image.aspect === "wide" ? classes.landscape : classes.portrait
+        tweet.images[offset].aspect === "wide"
+          ? classes.landscape
+          : classes.portrait
       }`}
     >
       <img
         className={classes.image}
-        src={props.image.url_small}
+        src={tweet.images[offset].url_small}
         alt=""
-        onClick={() => props.openModal(props.tweet)}
+        onClick={() => props.openModal(tweet, offset)}
       />
       <div className={classes.actionBar}>
         <Button
           size="small"
           color="primary"
-          onClick={() => props.handleRetweet(props.tweet)}
+          onClick={() => props.handleRetweet(tweet, offset)}
           className={`${classes.actionButton} ${classes.retweetButton}`}
         >
           <TwitterRetweet style={retweeted ? retweetStyle : null} />
@@ -128,7 +134,7 @@ const Image = props => {
         <Button
           size="small"
           color="primary"
-          onClick={() => props.handleLike(props.tweet)}
+          onClick={() => props.handleLike(tweet)}
           className={`${classes.actionButton} ${classes.likeButton}`}
         >
           {favorited ? (
@@ -138,7 +144,7 @@ const Image = props => {
           )}
         </Button>
         <Button
-          href={`https://twitter.com/statuses/${props.tweet.id}`}
+          href={`https://twitter.com/statuses/${tweet.id}`}
           target="_blank"
           rel="noopener"
           size="small"
@@ -153,6 +159,7 @@ const Image = props => {
 };
 
 export default compose(
+  withRouter,
   connect(
     null,
     { handleLike, handleRetweet, openModal }

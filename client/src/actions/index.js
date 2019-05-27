@@ -66,10 +66,10 @@ export const handleRetweet = tweet => async dispatch => {
   }
 };
 
-export const openModal = tweet => {
+export const openModal = (tweet, offset) => {
   return {
     type: "OPEN_MODAL",
-    payload: tweet,
+    payload: { tweet, offset },
   };
 };
 

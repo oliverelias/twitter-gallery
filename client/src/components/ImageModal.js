@@ -6,65 +6,100 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import { Cancel } from "mdi-material-ui";
 import { closeModal } from "../actions";
 
-const styles = {
-  modalContainer: {
-    position: "relative",
-    height: "100%",
-    maxWidth: "1024px",
-    backgroundColor: "#14171a",
-    margin: "0 auto",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "center",
+const styles = theme => {
+  return {
+    modalContainer: {
+      position: "relative",
+      height: "100%",
+      maxWidth: "1024px",
+      backgroundColor: "#14171a",
+      margin: "0 auto",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "flex-start",
+      alignItems: "center",
 
-    "&:focus": {
-      outline: "none",
+      "&:focus": {
+        outline: "none",
+      },
+
+      "& > *": {
+        padding: "24px",
+        [theme.breakpoints.up("xs")]: {
+          padding: 0,
+        },
+        [theme.breakpoints.up("sm")]: {
+          padding: "4px",
+        },
+        [theme.breakpoints.up("md")]: {
+          padding: "12px",
+        },
+      },
     },
-  },
-  imageContainer: {
-    padding: "48px 24px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "85%",
-  },
-  image: {
-    maxHeight: "100%",
-    maxWidth: "100%",
-  },
-  textContainer: {
-    padding: "24px",
-    display: "flex",
-    height: "15%",
-    color: "#ccc",
-  },
-  cancel: {
-    fill: "white",
-    fontSize: "38px",
-    position: "absolute",
-    right: "8px",
-    top: "8px",
-  },
+    imageContainer: {
+      marginTop: "48px",
+      display: "flex",
+      flexGrow: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      maxHeight: "85%",
+    },
+    image: {
+      maxHeight: "100%",
+      maxWidth: "100%",
+    },
+    textContainer: {
+      display: "flex",
+      justifySelf: "flex-end",
+      height: "15%",
+      color: "#ccc",
+    },
+    cancelButton: {
+      position: "absolute",
+      right: "8px",
+      top: "8px",
+      background: "none",
+      border: "none",
+      cursor: "pointer",
+
+      "&:focus": {
+        outline: "none",
+      },
+
+      "&:hover > *": {
+        fill: "#fff",
+      },
+    },
+    cancelIcon: {
+      fill: "#ccc",
+      fontSize: "38px",
+    },
+  };
 };
 
 const ImageModal = props => {
-  const { classes } = props;
+  const { classes, content } = props;
   return (
     <div className={classes.modalContainer}>
       <div className={classes.imageContainer}>
-        <img className={classes.image} src={props.tweet.images[0].url} alt="" />
+        <img
+          className={classes.image}
+          src={content.tweet.images[content.offset].url}
+          alt=""
+        />
       </div>
       <div className={classes.textContainer}>
-        <p className={classes.text}>{props.tweet.text}</p>
+        <p className={classes.text}>{content.tweet.text}</p>
       </div>
-      <CancelIcon className={classes.cancel} onClick={props.closeModal} />
+      <button className={classes.cancelButton} onClick={props.closeModal}>
+        <CancelIcon className={classes.cancelIcon} />
+      </button>
     </div>
   );
 };
 
 const mapStateToProps = state => {
-  return { tweet: state.interface.modalContent };
+  return { content: state.interface.modalContent };
 };
 
 export default compose(
