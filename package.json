@@ -14,10 +14,10 @@
   "dependencies": {
     "concurrently": "^4.1.0",
     "cookie-session": "^2.0.0-beta.3",
-    "express": "^4.16.4",
-    "image-size": "^0.7.3",
-    "mongoose": "^5.5.1",
-    "nodemon": "^1.18.11",
+    "express": "^4.17.1",
+    "image-size": "^0.7.4",
+    "mongoose": "^5.5.13",
+    "nodemon": "^1.19.1",
     "passport": "^0.4.0",
     "passport-twitter": "^1.0.4",
     "twit": "^2.2.11"

@@ -2,10 +2,6 @@ import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import GridList from "@material-ui/core/GridList";
-import GridListTile from "@material-ui/core/GridListTile";
-import Fade from "@material-ui/core/Fade";
-import axios from "axios";
 import { withRouter } from "react-router-dom";
 import Progress from "./NProgress/Progress";
 

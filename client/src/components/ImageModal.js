@@ -1,9 +1,8 @@
-import React, { Component } from "react";
+import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import CancelIcon from "@material-ui/icons/Cancel";
-import { Cancel } from "mdi-material-ui";
 import { closeModal } from "../actions";
 
 const styles = theme => {

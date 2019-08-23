@@ -5,7 +5,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import StarIcon from "@material-ui/icons/Star";
 import HomeIcon from "@material-ui/icons/Home";
-import LockOpenIcon from "@material-ui/icons/Home";
 import {
   GithubCircle,
   AccountMultiple,

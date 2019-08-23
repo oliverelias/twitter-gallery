@@ -3,7 +3,6 @@ import { withStyles } from "@material-ui/core";
 import Input from "@material-ui/core/Input";
 import SearchIcon from "@material-ui/icons/Search";
 import { fade } from "@material-ui/core/styles/colorManipulator";
-import { Redirect } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import { compose } from "redux";
 
