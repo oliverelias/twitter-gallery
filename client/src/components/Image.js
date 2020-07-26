@@ -143,7 +143,7 @@ const Image = props => {
           )}
         </Button>
         <Button
-          href={`https://twitter.com/statuses/${tweet.id}`}
+          href={`https://twitter.com/i/web/status/${tweet.id}`}
           target="_blank"
           rel="noopener"
           size="small"
